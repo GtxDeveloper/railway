@@ -65,6 +65,21 @@ builder.Services.AddSwaggerGen(c =>
 // Database Context configuration
 // We use Npgsql provider for PostgreSQL. Connection string is loaded from appsettings.json.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// --- 🛠 ВРЕМЕННЫЙ DEBUG ЛОГ (УДАЛИТЬ ПОСЛЕ ИСПРАВЛЕНИЯ) 🛠 ---
+Console.WriteLine("=================================================");
+if (string.IsNullOrEmpty(connectionString))
+{
+    Console.WriteLine("🚨 ОШИБКА: Connection String == NULL или пустая!");
+}
+else
+{
+    // Выводим строку, чтобы увидеть, не попал ли туда мусор типа "${{...}}"
+    Console.WriteLine($"✅ Connection String: '{connectionString}'");
+}
+Console.WriteLine("=================================================");
+// -------------------------------------------------------------
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 

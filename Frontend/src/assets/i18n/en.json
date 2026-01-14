@@ -1,0 +1,10 @@
+{
+  "HEADER": {
+    "PROFILE": "Profile",
+    "BUSINESS": "My Business",
+    "ADMIN": "Admin",
+    "LOGOUT": "Log out",
+    "REGISTER": "Register",
+    "LOGIN": "Log in"
+  }
+}

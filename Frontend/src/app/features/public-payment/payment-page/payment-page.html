@@ -1,0 +1,112 @@
+<div class="bg-[#27a19b] min-h-screen flex flex-col items-center p-4 font-quicksand">
+
+  @if (store.isLoading()) {
+    <div class="flex-1 flex flex-col items-center justify-center text-white space-y-4">
+      <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span class="text-xl font-bold">
+        {{ 'PAYMENT.LOADING_PROFILE' | translate }}
+      </span>
+    </div>
+  }
+
+  @else if (store.error()) {
+    <div class="flex-1 flex flex-col items-center justify-center text-white">
+      <div class="bg-red-500/20 p-6 rounded-2xl border-2 border-red-200 backdrop-blur-sm text-center">
+        <h2 class="text-2xl font-bold mb-2">
+          {{ 'PAYMENT.ERROR' | translate }}
+        </h2>
+        <p>{{ store.error() }}</p>
+      </div>
+    </div>
+  }
+
+  @else if (store.worker()) {
+    <div class="w-full max-w-md space-y-6 pt-6 animate-fade-in">
+
+      <div class="flex flex-col items-center text-white mb-8">
+        <div class="w-28 h-28 rounded-full border-4 border-white shadow-xl overflow-hidden mb-4 bg-gray-200">
+          <img
+            [src]="store.worker()?.avatarUrl || 'assets/default-avatar.png'"
+            alt="Avatar"
+            class="w-full h-full object-cover"
+          >
+        </div>
+        <h1 class="text-3xl font-bold raleway text-center">{{ store.worker()?.name }}</h1>
+        <p class="text-white/80 font-bold uppercase tracking-widest text-sm mt-1 bg-black/10 px-3 py-1 rounded-full">
+          {{ store.worker()?.job }}
+        </p>
+      </div>
+
+      <div class="relative group">
+        <input
+          type="number"
+          inputmode="decimal"
+          [ngModel]="amount()"
+          (ngModelChange)="amount.set($event)"
+          placeholder="0"
+          class="no-spin w-full p-4 bg-white rounded-[2rem] border-4 border-[#ffc800] text-center text-4xl font-bold text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-4 focus:ring-[#ffc800]/30 shadow-lg transition-all"
+        >
+        <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#ffc800] text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          {{ 'PAYMENT.TIP_AMOUNT_LABEL' | translate }}
+        </span>
+
+        @if (amount()) {
+          <span class="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-2xl">€</span>
+        }
+      </div>
+
+      <div class="grid grid-cols-4 gap-3">
+        @for (val of presets; track val) {
+          <button
+            (click)="selectAmount(val)"
+            [class.bg-[#ffc800]]="amount() === val"
+            [class.text-black]="amount() === val"
+            [class.scale-105]="amount() === val"
+            class="h-13 rounded-full border-4 border-[#ffc800] bg-white text-xl font-bold text-gray-600 hover:bg-yellow-50 transition-all active:scale-90 shadow-sm flex items-center justify-center"
+          >
+            {{ val }}€
+          </button>
+        }
+      </div>
+
+      <div class="relative">
+        <textarea
+          [(ngModel)]="note"
+          [placeholder]="'PAYMENT.NOTE_PLACEHOLDER' | translate"
+          class="w-full p-5 h-32 bg-white rounded-[2rem] border-4 border-[#ffc800] text-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-[#ffc800]/30 resize-none shadow-sm"
+        ></textarea>
+      </div>
+
+      <button
+        (click)="pay()"
+        [disabled]="store.isPaying() || !amount()"
+        class="w-full py-5 raleway rounded-full bg-[#ffc800] border-4 border-[#ffc800]
+           hover:bg-white hover:text-[#ffc800] transition-all shadow-xl active:scale-95
+           flex items-center justify-center gap-3
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 mt-4"
+      >
+        @if (store.isPaying()) {
+          <svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>{{ 'PAYMENT.PROCESSING' | translate }}</span>
+        } @else {
+          <span class="text-2xl font-bold">
+            {{ 'PAYMENT.PAY_BUTTON' | translate }} {{ amount() ? amount() + '€' : '' }}
+          </span>
+        }
+      </button>
+
+      <div class="text-center pb-6 opacity-60">
+        <p class="text-white text-xs font-bold raleway">
+          {{ 'PAYMENT.POWERED_BY' | translate }}
+        </p>
+      </div>
+
+    </div>
+  }
+</div>

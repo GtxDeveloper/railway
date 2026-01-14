@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  # Наш сервис базы данных
+  db:
+    image: postgres:15-alpine
+    container_name: tringelty_db
+    environment:
+      # В реальном проекте пароли берем из .env файла, но для локальной разработки хардкод допустим
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: tringelty_db
+    ports:
+      # Прокидываем порт наружу: localhost:5432 будет вести в контейнер
+      - "5435:5432"
+    volumes:
+      # Чтобы данные не пропадали при перезапуске контейнера
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

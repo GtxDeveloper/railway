@@ -1,0 +1,10 @@
+{
+  "HEADER": {
+    "PROFILE": "Profil",
+    "BUSINESS": "Podnikanie",
+    "ADMIN": "Admin",
+    "LOGOUT": "Odhlásiť sa",
+    "REGISTER": "Registrovať sa",
+    "LOGIN": "Prihlásiť sa"
+  }
+}

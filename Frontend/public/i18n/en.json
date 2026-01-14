@@ -1,0 +1,231 @@
+{
+  "HEADER": {
+    "PROFILE": "Profile",
+    "BUSINESS": "My Business",
+    "ADMIN": "Admin",
+    "LOGOUT": "Log out",
+    "REGISTER": "Register",
+    "LOGIN": "Log in"
+  },
+  "FOOTER": {
+    "LINKS": {
+      "CONTACTS": "Contacts",
+      "TERMS": "Terms & Conditions",
+      "PRIVACY": "Privacy Policy",
+      "DATA_TRANSFER": "Consent to Personal Data Transfer",
+      "DATA_PROCESSING": "Consent to Personal Data Processing",
+      "PAYMENT_SECURITY": "Payment Security Policy"
+    },
+    "LEGAL": {
+      "SUPPORT_TEXT": "For any questions or complaints regarding payments and services, please contact our customer support at Email@gmail.com",
+      "RESELLER_INFO": "Certified reseller in the Russian Federation LLC \"Prokonsalt\" TIN 1657139265, 420015, Republic of Tatarstan, Kazan, Shchapova st. 47, office 405.",
+      "BANK_DETAILS": "Bank details: 40702810529480001030; Limited Liability Company \"Prokonsalt\"; TIN: 1657139265; Code: 165501001; Bank: JSC \"ALFA-BANK\"; BIC: 042202824; Corr. account: 30101810200000000824; Registered office: 420015, Republic of Tatarstan, Kazan, Shchapova st. 47, office 405."
+    }
+  },
+  "LOGIN": {
+    "TITLE": "Log In",
+    "EMAIL": "E-mail",
+    "PASSWORD": "Password",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "BUTTON": "Log In",
+    "LOADING": "Logging in...",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER": "Sign up.",
+    "ERROR_CREDENTIALS": "Invalid email or password.",
+    "ERROR_GENERIC": "An error occurred. Please try again later."
+  },
+  "REGISTER": {
+    "WORKER": {
+      "TITLE": "I will receive tips",
+      "SUBTITLE": "Waiter, bartender..."
+    },
+    "OWNER": {
+      "TITLE": "I run a business",
+      "SUBTITLE": "Restaurant, cafe, beauty salon..."
+    },
+    "SUCCESS": {
+      "TITLE": "Check your email",
+      "MESSAGE_PRE": "We have sent an email with a verification code to",
+      "BACK": "Back to",
+      "LOGIN_LINK": "login."
+    },
+    "FORM": {
+      "NAME": "Name",
+      "SURNAME": "Surname",
+      "BRAND": "Brand Name",
+      "EMAIL": "E-mail",
+      "PHONE": "Phone",
+      "CITY": "City",
+      "PASSWORD": "Password",
+      "REPEAT_PASSWORD": "Repeat password"
+    },
+    "BUTTON": "Sign Up",
+    "BUTTON_BACK": "Go back",
+    "LOADING": "Registering...",
+    "HAVE_ACCOUNT": "Already have a Tringelt account?",
+    "LOGIN_HERE": "Log in.",
+    "ERROR_EMAIL_EXISTS": "User with this email already exists.",
+    "ERROR_GENERIC": "An error occurred. Please try again later.",
+    "ERROR_INVALID_CODE": "Invalid verification code. Please try again."
+  },
+  "CHOOSE": {
+    "OWNER": {
+      "TITLE": "I run a business",
+      "SUBTITLE": "Restaurant, cafe, beauty salon..."
+    },
+    "WORKER": {
+      "TITLE": "I will receive tips",
+      "SUBTITLE": "Waiter, bartender..."
+    },
+    "BUTTON": "Register",
+    "HAVE_ACCOUNT": "Already have an",
+    "ACCOUNT": "account?"
+  },
+  "PAYMENT": {
+    "LOADING_PROFILE": "Loading profile...",
+    "ERROR": "Error",
+    "TIP_AMOUNT_LABEL": "Tip Amount",
+    "NOTE_PLACEHOLDER": "Leave a message? (optional)",
+    "PROCESSING": "Processing...",
+    "PAY_BUTTON": "Pay",
+    "POWERED_BY": "Powered by Tringelty"
+  },
+  "PAYMENT_CANCEL": {
+    "TITLE": "Payment Cancelled",
+    "MESSAGE": "The transaction was not completed or was cancelled. No funds were deducted from your account.",
+    "BUTTON": "Back to Home"
+  },
+  "PAYMENT_SUCCESS": {
+    "TITLE": "Payment Successful!",
+    "MESSAGE": "Your payment was processed successfully. Thank you for your transaction.",
+    "BUTTON": "Back to Home"
+  },
+  "ONBOARD_SUCCESS": {
+    "TITLE": "Successfully Connected!",
+    "MESSAGE": "Your Stripe account has been successfully linked. You can now receive payments.",
+    "BUTTON": "Go to Dashboard",
+    "REDIRECT_MSG": "You will be redirected automatically in {{seconds}} seconds..."
+  },
+  "DASHBOARD": {
+    "CHANGE_AVATAR": "Change",
+    "BALANCE": "Balance:",
+    "PENDING": "Pending",
+    "EARNINGS": "Earned:",
+    "REDIRECTING": "Redirecting...",
+    "PAYOUT": "Payout money",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "PHONE": "Phone",
+    "JOB_TITLE": "Job Position",
+    "SAVING": "Saving...",
+    "SAVE_CHANGES": "Save changes",
+    "QR_TITLE": "Your QR Code",
+    "LOADING": "Loading...",
+    "DOWNLOAD_QR": "Download QR Code",
+    "CONNECTING": "Connecting...",
+    "CONNECT_STRIPE": "Connect Stripe",
+    "PAYMENT_LINK_LABEL": "Your payment link",
+    "COPY_LINK": "Copy link",
+    "NO_TRANSACTIONS": "No transactions yet",
+    "TRINGELT": "Tip",
+    "TOAST_COPIED": "Link copied to clipboard!"
+  },
+  "EMAIL_CHANGE": {
+    "LABEL": "Email",
+    "PLACEHOLDER_CURRENT": "enter email",
+    "CHANGE_BUTTON": "change",
+    "MODAL_TITLE_EMAIL": "Change Email",
+    "MODAL_TITLE_CODE": "Enter Code",
+    "NEW_EMAIL_LABEL": "New Email",
+    "NEW_EMAIL_PLACEHOLDER": "example@gmail.com",
+    "ERROR_FORMAT": "Invalid email format",
+    "CANCEL": "Cancel",
+    "SEND_CODE": "Send Code",
+    "SENDING": "Sending...",
+    "CODE_SENT_TO": "Code sent to",
+    "BACK": "Back",
+    "CONFIRM": "Confirm"
+  },
+  "PASSWORD_CHANGE": {
+    "LABEL": "Password",
+    "CHANGE_BUTTON": "change",
+    "MODAL_TITLE": "Change Password",
+    "OLD_PASSWORD_LABEL": "Old Password",
+    "OLD_PASSWORD_PLACEHOLDER": "Enter old password",
+    "NEW_PASSWORD_LABEL": "New Password",
+    "NEW_PASSWORD_PLACEHOLDER": "Enter new password",
+    "CANCEL": "Cancel",
+    "SAVE": "Save"
+  },
+  "PROFILE_EDIT": {
+    "CHANGE_BUTTON": "change",
+    "EDIT_TITLE": "Edit",
+    "CANCEL": "Cancel",
+    "SAVE": "Save"
+  },
+  "BUSINESS_DASHBOARD": {
+    "CHANGE_LOGO": "Change Logo",
+    "DEFAULT_NAME": "Business Name",
+    "DEFAULT_CITY": "City",
+    "EMPLOYEES_COUNT_LABEL": "Employees",
+    "DETAILS_TITLE": "Business Details",
+    "BRAND_NAME_LABEL": "Brand Name",
+    "BRAND_NAME_PLACEHOLDER": "Enter name",
+    "CITY_LABEL": "City / Address",
+    "CITY_PLACEHOLDER": "Enter city",
+    "SAVING": "Saving...",
+    "SAVE_CHANGES": "Save Changes",
+    "EMPLOYEES_TITLE": "Employees",
+    "ADD_NEW": "Add New",
+    "ADD": "Add",
+    "NO_EMPLOYEES": "You have no employees yet",
+    "TOOLTIP_QR": "Show QR Code",
+    "TOOLTIP_INVITE": "Copy Invitation",
+    "TOOLTIP_EDIT": "Edit",
+    "MODAL_EDIT_TITLE": "Edit Employee",
+    "MODAL_ADD_TITLE": "Add Employee",
+    "LABEL_FIRST_NAME": "First Name",
+    "LABEL_LAST_NAME": "Last Name",
+    "LABEL_JOB": "Position",
+    "PLACEHOLDER_JOB": "e.g. Waiter",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "PAY_LINK_LABEL": "Payment Link",
+    "TOOLTIP_COPY": "Copy Link",
+    "DOWNLOAD": "Download",
+    "DONE": "Done",
+    "TOOLTIP_DELETE": "Delete",
+    "DELETE_MODAL_TITLE": "Delete Employee?",
+    "DELETE_MODAL_MESSAGE": "Are you sure you want to delete this employee? This action cannot be undone.",
+    "DELETE_CONFIRM": "Delete"
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Admin Dashboard",
+    "SUBTITLE": "Tringelty platform performance overview",
+    "REFRESH": "Refresh",
+    "TAB_OVERVIEW": "Overview",
+    "TAB_TRANSACTIONS": "Transactions",
+    "REVENUE": "Revenue",
+    "TURNOVER": "Turnover",
+    "USERS": "Users",
+    "BUSINESSES": "Businesses",
+    "BUSINESSES_AND_WORKERS": "Businesses & Employees",
+    "OWNER": "Owner",
+    "NO_STRIPE": "No Stripe",
+    "NO_EMPLOYEES": "No employees",
+    "TOOLTIP_QR": "Download QR Code",
+    "TOOLTIP_LINK": "Copy Payment Link",
+    "HISTORY_TITLE": "Transaction History",
+    "TOTAL": "Total",
+    "TABLE_DATE": "Date",
+    "TABLE_ENTITY": "Business / Employee",
+    "TABLE_AMOUNT": "Amount",
+    "TABLE_FEE": "Fee",
+    "NO_TRANSACTIONS": "No transactions"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Oops! Page not found",
+    "MESSAGE": "It looks like you're lost. The page you are looking for doesn't exist or has been moved.",
+    "BUTTON": "Back to Home"
+  }
+}

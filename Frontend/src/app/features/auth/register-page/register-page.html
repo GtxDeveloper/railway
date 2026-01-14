@@ -1,0 +1,191 @@
+<div class="rounded-xl me-auto ms-auto max-w-250 space-y-6">
+
+  @if (!isSuccess()) {
+    <div class="text-center flex flex-col items-center justify-center">
+
+      @if (role() === 'worker') {
+        <img class="mb-5 w-32 h-32 lg:w-auto lg:h-auto object-contain" src="worker.png" alt="Worker">
+        <h1 class="text-3xl sm:text-4xl text-white raleway font-bold">
+          {{ 'REGISTER.WORKER.TITLE' | translate }}
+        </h1>
+        <p class="text-xl sm:text-3xl text-white/90 raleway font-medium mt-4 sm:mt-6">
+          {{ 'REGISTER.WORKER.SUBTITLE' | translate }}
+        </p>
+      }
+
+      @else {
+        <img class="mb-5 w-32 h-32 lg:w-auto lg:h-auto object-contain" src="owner.png" alt="Owner">
+        <h1 class="text-3xl sm:text-4xl text-white raleway font-bold">
+          {{ 'REGISTER.OWNER.TITLE' | translate }}
+        </h1>
+        <p class="text-xl sm:text-3xl text-white/90 raleway font-medium mt-4 sm:mt-6">
+          {{ 'REGISTER.OWNER.SUBTITLE' | translate }}
+        </p>
+      }
+
+    </div>
+  }
+
+  @if (isSuccess()) {
+    <div class="text-center space-y-6 py-4 animate-fade-in">
+      <div class="rounded-full flex items-center justify-center mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff"
+             class="w-20 h-20">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+        </svg>
+      </div>
+
+      <div>
+        <h2 class="raleway font-bold text-3xl text-white">
+          {{ 'REGISTER.SUCCESS.TITLE' | translate }}
+        </h2>
+        <p class="text-white font-medium text-2xl raleway mt-2">
+          {{ 'REGISTER.SUCCESS.MESSAGE_PRE' | translate }}<br>
+          <span class="font-semibold raleway text-[#ffc800]">{{submittedEmail()}}</span>
+        </p>
+      </div>
+
+      <div class="pt-6 flex justify-center gap-3">
+        @for (digit of digits; track i; let i = $index) {
+          <input
+            #otpInput
+            type="text"
+            inputmode="numeric"
+            maxlength="1"
+            [(ngModel)]="digits[i]"
+            (input)="onInput(i, $event)"
+            (keydown)="onKeyDown(i, $event)"
+            (paste)="onPaste($event)"
+            class="w-12 h-14 sm:w-14 sm:h-16 rounded-xl text-center text-3xl font-bold
+                 text-gray-900 bg-white outline-none transition-all duration-200
+                 focus:ring-4 focus:ring-[#ffc800]/50 focus:-translate-y-1 shadow-lg"
+          >
+        }
+      </div>
+
+      @if (error()) {
+        <div class="bg-[#53b5b0] border border-white rounded-3xl p-3 mx-auto max-w-sm flex items-center justify-center gap-3 mt-4 animate-fade-in">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="text-white font-medium raleway text-sm">
+            {{ error() | translate }}
+          </span>
+        </div>
+      }
+
+      <button
+        (click)="resetRegistration()"
+        class="w-fit flex items-center gap-2 mx-auto raleway bg-[#ffc800] text-black font-bold text-xl rounded-full px-8 py-3 hover:bg-white hover:text-[#ffc800] transition ease-in"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+
+        {{ 'REGISTER.BUTTON_BACK' | translate }}
+      </button>
+
+      <div class="pt-4">
+        <a
+          class="group flex text-white transition w-fit ease-in raleway text-xl me-auto ms-auto cursor-pointer"
+          [routerLink]="['/login']">
+          {{ 'REGISTER.SUCCESS.BACK' | translate }}
+          <span class="text-[#ffc800] ms-1.5 group-hover:underline transition ease-in">
+            {{ 'REGISTER.SUCCESS.LOGIN_LINK' | translate }}
+          </span>
+        </a>
+      </div>
+    </div>
+  }
+
+  @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4 flex flex-col gap-3">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-ui-input
+          [control]="getControl('name')"
+          [placeholder]="'REGISTER.FORM.NAME' | translate"
+        ></app-ui-input>
+
+        <app-ui-input
+          [control]="getControl('surname')"
+          [placeholder]="'REGISTER.FORM.SURNAME' | translate"
+        ></app-ui-input>
+      </div>
+
+      <app-ui-input
+        [control]="getControl('brand')"
+        [placeholder]="'REGISTER.FORM.BRAND' | translate"
+      ></app-ui-input>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-ui-input
+          type="email"
+          [control]="getControl('email')"
+          [placeholder]="'REGISTER.FORM.EMAIL' | translate"
+        ></app-ui-input>
+
+        <app-ui-input
+          type="tel"
+          [control]="getControl('phone')"
+          [placeholder]="'REGISTER.FORM.PHONE' | translate"
+        ></app-ui-input>
+      </div>
+
+      <app-ui-input
+        [control]="getControl('city')"
+        [placeholder]="'REGISTER.FORM.CITY' | translate"
+      ></app-ui-input>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-ui-input
+          type="password"
+          [control]="getControl('password')"
+          [placeholder]="'REGISTER.FORM.PASSWORD' | translate"
+        ></app-ui-input>
+        <app-ui-input
+          type="password"
+          [control]="getControl('repeatPassword')"
+          [placeholder]="'REGISTER.FORM.REPEAT_PASSWORD' | translate"
+        ></app-ui-input>
+      </div>
+
+      @if (error()) {
+        <div class="bg-[#53b5b0] border border-white rounded-3xl p-4 flex items-center gap-3 animate-fade-in mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="text-white font-medium raleway text-sm">
+            {{ error() | translate }}
+          </span>
+        </div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || isLoading()"
+        class="me-auto ms-auto bg-[#ffc800] raleway font-bold text-4xl rounded-full px-15 py-7 hover:bg-white hover:text-[#ffc800] transition ease-in disabled:bg-gray-500 disabled:hover:text-black"
+      >
+        @if (isLoading()) {
+          {{ 'REGISTER.LOADING' | translate }}
+        } @else {
+          {{ 'REGISTER.BUTTON' | translate }}
+        }
+      </button>
+    </form>
+
+    <div class="text-center text-sm text-gray-600 pt-2">
+      <a
+        class="group flex text-white transition w-fit ease-in raleway text-xl lg:text-3xl me-auto ms-auto cursor-pointer"
+        [routerLink]="['/login']"
+      >
+        {{ 'REGISTER.HAVE_ACCOUNT' | translate }}
+        <span class="text-[#ffc800] ms-1.5 group-hover:underline transition ease-in">
+          {{ 'REGISTER.LOGIN_HERE' | translate }}
+        </span>
+      </a>
+    </div>
+  }
+
+</div>

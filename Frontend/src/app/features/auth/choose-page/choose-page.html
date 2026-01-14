@@ -1,0 +1,61 @@
+<div class="flex flex-col lg:flex-row justify-center items-center gap-6 lg:gap-10 px-4 w-full max-w-[90rem] mx-auto">
+
+  <div class="bg-[#53b5b0] w-full max-w-2xl lg:w-[54rem] rounded-[2rem] lg:rounded-[3rem] p-6 lg:px-10 lg:py-8 border-2 border-white flex flex-col gap-8 lg:gap-14 shadow-lg">
+
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-10 text-center sm:text-left">
+      <img src="owner.png" alt="Owner" class="w-32 h-32 lg:w-auto lg:h-auto object-contain">
+
+      <div class="pt-0 sm:pt-2.5 flex flex-col gap-3 lg:gap-6">
+        <h2 class="text-white raleway font-bold text-2xl sm:text-3xl lg:text-4xl leading-tight">
+          {{ 'CHOOSE.OWNER.TITLE' | translate }}
+        </h2>
+        <p class="raleway text-white/90 font-medium text-lg sm:text-xl lg:text-3xl">
+          {{ 'CHOOSE.OWNER.SUBTITLE' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <a
+      class="w-full sm:w-auto mx-auto bg-[#ffc800] raleway font-bold text-xl lg:text-4xl rounded-full px-8 py-4 lg:px-14 lg:py-7 hover:bg-white hover:text-[#ffc800] transition ease-in text-center shadow-md active:scale-95"
+      [routerLink]="['/register']"
+      [queryParams]="{ role: 'owner' }">
+      {{ 'CHOOSE.BUTTON' | translate }}
+    </a>
+  </div>
+
+  <div class="bg-[#53b5b0] w-full max-w-2xl lg:w-[54rem] rounded-[2rem] lg:rounded-[3rem] p-6 lg:px-10 lg:py-8 border-2 border-white flex flex-col gap-8 lg:gap-14 shadow-lg">
+
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-10 text-center sm:text-left">
+      <img src="worker.png" alt="Worker" class="w-32 h-32 lg:w-auto lg:h-auto object-contain">
+
+      <div class="pt-0 sm:pt-2.5 flex flex-col gap-3 lg:gap-6">
+        <h2 class="text-white raleway font-bold text-2xl sm:text-3xl lg:text-4xl leading-tight">
+          {{ 'CHOOSE.WORKER.TITLE' | translate }}
+        </h2>
+        <p class="raleway text-white/90 font-medium text-lg sm:text-xl lg:text-3xl">
+          {{ 'CHOOSE.WORKER.SUBTITLE' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <a
+      class="w-full sm:w-auto mx-auto bg-[#ffc800] raleway font-bold text-xl lg:text-4xl rounded-full px-8 py-4 lg:px-14 lg:py-7 hover:bg-white hover:text-[#ffc800] transition ease-in text-center shadow-md active:scale-95"
+      [routerLink]="['/register']"
+      [queryParams]="{ role: 'worker' }">
+      {{ 'CHOOSE.BUTTON' | translate }}
+    </a>
+  </div>
+
+</div>
+
+<div class="text-center mt-12 lg:mt-32 pb-10">
+  <a
+    class="group inline-flex items-center hover:text-white transition ease-in raleway text-xl lg:text-3xl cursor-pointer font-bold text-gray-800 lg:text-black"
+    [routerLink]="['/login']"
+  >
+    {{ 'CHOOSE.HAVE_ACCOUNT' | translate }}
+    <span class="text-[#ffc800] ml-2 group-hover:text-white transition ease-in underline decoration-2 underline-offset-4 decoration-transparent group-hover:decoration-white">
+      {{ 'CHOOSE.ACCOUNT' | translate }}
+    </span>
+  </a>
+</div>

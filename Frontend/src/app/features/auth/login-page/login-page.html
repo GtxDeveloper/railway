@@ -1,0 +1,65 @@
+<div class="rounded-xl me-auto ms-auto max-w-110 space-y-8">
+
+  <div class="text-center flex flex-col items-center justify-center">
+    <h1 class="text-5xl text-white raleway font-bold">
+      {{ 'LOGIN.TITLE' | translate }}
+    </h1>
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6 flex flex-col gap-4">
+
+    <app-ui-input
+      type="email"
+      [control]="getControl('email')"
+      [placeholder]="'LOGIN.EMAIL' | translate"
+    ></app-ui-input>
+
+    <div class="flex flex-col gap-2">
+      <app-ui-input
+        type="password"
+        [control]="getControl('password')"
+        [placeholder]="'LOGIN.PASSWORD' | translate"
+      ></app-ui-input>
+
+      <a [routerLink]="['/forgot-password']" class="text-[#ffc800] hover:underline text-sm raleway text-right cursor-pointer transition">
+        {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
+      </a>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="bg-[#53b5b0] border border-white rounded-3xl p-4 flex items-center gap-3 animate-fade-in">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="text-white font-medium raleway text-sm">
+          {{ errorMessage() | translate }}
+        </span>
+      </div>
+    }
+
+    <button
+      type="submit"
+      [disabled]="loginForm.invalid || isLoading()"
+      class="me-auto ms-auto w-full bg-[#ffc800] raleway font-bold text-4xl rounded-full px-15 py-7 hover:bg-white hover:text-[#ffc800] transition ease-in disabled:bg-gray-500 disabled:hover:text-black mt-4"
+    >
+      @if (isLoading()) {
+        {{ 'LOGIN.LOADING' | translate }}
+      } @else {
+        {{ 'LOGIN.BUTTON' | translate }}
+      }
+    </button>
+  </form>
+
+  <div class="text-center text-sm text-gray-600 pt-4">
+    <a
+      class="group flex text-white transition w-fit ease-in raleway text-xl me-auto ms-auto cursor-pointer"
+      [routerLink]="['/register']"
+    >
+      {{ 'LOGIN.NO_ACCOUNT' | translate }}
+      <span class="text-[#ffc800] ms-1.5 group-hover:underline transition ease-in">
+        {{ 'LOGIN.REGISTER' | translate }}
+      </span>
+    </a>
+  </div>
+
+</div>

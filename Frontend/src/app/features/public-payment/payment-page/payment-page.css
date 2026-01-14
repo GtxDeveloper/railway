@@ -1,0 +1,11 @@
+/* Убираем стрелки в Chrome, Safari, Edge, Opera */
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Убираем стрелки в Firefox */
+.no-spin {
+  -moz-appearance: textfield;
+}

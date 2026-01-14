@@ -1,0 +1,231 @@
+{
+  "HEADER": {
+    "PROFILE": "Profil",
+    "BUSINESS": "Podnikanie",
+    "ADMIN": "Admin",
+    "LOGOUT": "Odhlásiť sa",
+    "REGISTER": "Registrovať sa",
+    "LOGIN": "Prihlásiť sa"
+  },
+  "FOOTER": {
+    "LINKS": {
+      "CONTACTS": "Kontakty",
+      "TERMS": "Obchodné podmienky",
+      "PRIVACY": "Zásady spracúvania osobných údajov",
+      "DATA_TRANSFER": "Súhlas s poskytnutím a prenosom osobných údajov",
+      "DATA_PROCESSING": "Súhlas so spracovaním osobných údajov",
+      "PAYMENT_SECURITY": "Zásady bezpečnosti platieb"
+    },
+    "LEGAL": {
+      "SUPPORT_TEXT": "V prípade akýchkoľvek otázok alebo reklamácií týkajúcich sa platieb a služieb kontaktujte prosím našu zákaznícku podporu na adrese Email@gmail.com",
+      "RESELLER_INFO": "Certifikovaný predajca na území Ruskej federácie s.r.o. \"Prokonsalt\" DIČ 1657139265, 420015, Republika Tatarstan, Kazaň, ul. Ščapova 47, kancelária 405.",
+      "BANK_DETAILS": "Bankové spojenie: 40702810529480001030; Spoločnosť s ručením obmedzeným \"Prokonsalt\"; DIČ: 1657139265; Kód: 165501001; Banka: AO \"ALFA-BANK\"; BIC: 042202824; Kor. účet: 30101810200000000824; Sídlo spoločnosti: 420015, Republika Tatarstan, Kazaň, ul. Ščapova 47, kancelária 405."
+    }
+  },
+  "LOGIN": {
+    "TITLE": "Prihlásiť sa",
+    "EMAIL": "E-mail",
+    "PASSWORD": "Heslo",
+    "FORGOT_PASSWORD": "Zabudli ste heslo?",
+    "BUTTON": "Prihlásiť sa",
+    "LOADING": "Prihlasujem...",
+    "NO_ACCOUNT": "Ešte nemáte účet?",
+    "REGISTER": "Zaregistrujte sa.",
+    "ERROR_CREDENTIALS": "Zadali ste nesprávny e-mail alebo heslo.",
+    "ERROR_GENERIC": "Nastala chyba. Skúste to prosím neskôr."
+  },
+  "REGISTER": {
+    "WORKER": {
+      "TITLE": "Budem prijímať sprepitné",
+      "SUBTITLE": "Čašník, barman..."
+    },
+    "OWNER": {
+      "TITLE": "Vediem podnik",
+      "SUBTITLE": "Reštaurácia, kaviareň, salón krásy..."
+    },
+    "SUCCESS": {
+      "TITLE": "Skontrolujte si email",
+      "MESSAGE_PRE": "Odoslali sme e-mail s overovacím kódom na",
+      "BACK": "Späť na",
+      "LOGIN_LINK": "prihlásenie."
+    },
+    "FORM": {
+      "NAME": "Meno",
+      "SURNAME": "Priezvisko",
+      "BRAND": "Brand",
+      "EMAIL": "E-mail",
+      "PHONE": "Telefón",
+      "CITY": "Mesto",
+      "PASSWORD": "Heslo",
+      "REPEAT_PASSWORD": "Zopakujte heslo"
+    },
+    "BUTTON": "Registrovať sa",
+    "BUTTON_BACK": "Späť",
+    "LOADING": "Registrácia...",
+    "HAVE_ACCOUNT": "Už máte účet Tringelt?",
+    "LOGIN_HERE": "Prihláste sa.",
+    "ERROR_EMAIL_EXISTS": "Používateľ s týmto e-mailom už existuje.",
+    "ERROR_GENERIC": "Nastala chyba. Skúste to prosím neskôr.",
+    "ERROR_INVALID_CODE": "Nesprávny overovací kód. Skúste znova."
+  },
+  "CHOOSE": {
+    "OWNER": {
+      "TITLE": "Vediem podnik",
+      "SUBTITLE": "Reštaurácia, kaviareň, salón krásy..."
+    },
+    "WORKER": {
+      "TITLE": "Budem prijímať sprepitné",
+      "SUBTITLE": "Čašník, barman..."
+    },
+    "BUTTON": "Registrovať sa",
+    "HAVE_ACCOUNT": "Už máte",
+    "ACCOUNT": "účet?"
+  },
+  "PAYMENT": {
+    "LOADING_PROFILE": "Načítavam profil...",
+    "ERROR": "Chyba",
+    "TIP_AMOUNT_LABEL": "Suma sprepitného",
+    "NOTE_PLACEHOLDER": "Chcete niečo odkázať? (nepovinné)",
+    "PROCESSING": "Spracovávam...",
+    "PAY_BUTTON": "Zaplatiť",
+    "POWERED_BY": "Powered by Tringelty"
+  },
+  "PAYMENT_CANCEL": {
+    "TITLE": "Platba zrušená",
+    "MESSAGE": "Transakcia nebola dokončená alebo bola zrušená. Z vášho účtu neboli stiahnuté žiadne peniaze.",
+    "BUTTON": "Späť na úvod"
+  },
+  "PAYMENT_SUCCESS": {
+    "TITLE": "Platba úspešná!",
+    "MESSAGE": "Vaša platba bola úspešne spracovaná. Ďakujeme za vašu transakciu.",
+    "BUTTON": "Späť na úvod"
+  },
+  "ONBOARD_SUCCESS": {
+    "TITLE": "Úspešne pripojené!",
+    "MESSAGE": "Váš účet Stripe bol úspešne prepojený. Teraz môžete prijímať platby.",
+    "BUTTON": "Prejsť na nástenku",
+    "REDIRECT_MSG": "Budete presmerovaný automaticky o {{seconds}} sekúnd..."
+  },
+  "DASHBOARD": {
+    "CHANGE_AVATAR": "Zmeniť",
+    "BALANCE": "Zostatok:",
+    "PENDING": "V spracovaní",
+    "EARNINGS": "Zarobené:",
+    "REDIRECTING": "Presmerovanie...",
+    "PAYOUT": "Vyplatiť peniaze",
+    "FIRST_NAME": "Meno",
+    "LAST_NAME": "Priezvisko",
+    "PHONE": "Telefón",
+    "JOB_TITLE": "Pracovná pozícia",
+    "SAVING": "Ukladá sa...",
+    "SAVE_CHANGES": "Uložiť zmeny",
+    "QR_TITLE": "Váš QR kód",
+    "LOADING": "Načítavanie...",
+    "DOWNLOAD_QR": "Stiahnuť QR kód",
+    "CONNECTING": "Pripája sa...",
+    "CONNECT_STRIPE": "Pripojiť Stripe",
+    "PAYMENT_LINK_LABEL": "Váš odkaz na platbu",
+    "COPY_LINK": "Kopírovať odkaz",
+    "NO_TRANSACTIONS": "Zatiaľ žiadne transakcie",
+    "TRINGELT": "Tringelt",
+    "TOAST_COPIED": "Odkaz skopírovaný do schránky!"
+  },
+  "EMAIL_CHANGE": {
+    "LABEL": "Email",
+    "PLACEHOLDER_CURRENT": "zazadajte email",
+    "CHANGE_BUTTON": "zmeniť",
+    "MODAL_TITLE_EMAIL": "Zmena emailu",
+    "MODAL_TITLE_CODE": "Zadajte kód",
+    "NEW_EMAIL_LABEL": "Nový email",
+    "NEW_EMAIL_PLACEHOLDER": "napriklad@gmail.com",
+    "ERROR_FORMAT": "Nesprávny formát emailu",
+    "CANCEL": "Zrušiť",
+    "SEND_CODE": "Zaslať kód",
+    "SENDING": "Odosielam...",
+    "CODE_SENT_TO": "Kód sme poslali na",
+    "BACK": "Späť",
+    "CONFIRM": "Potvrdiť"
+  },
+  "PASSWORD_CHANGE": {
+    "LABEL": "Heslo",
+    "CHANGE_BUTTON": "zmeniť",
+    "MODAL_TITLE": "Zmena hesla",
+    "OLD_PASSWORD_LABEL": "Staré heslo",
+    "OLD_PASSWORD_PLACEHOLDER": "Zadajte staré heslo",
+    "NEW_PASSWORD_LABEL": "Nové heslo",
+    "NEW_PASSWORD_PLACEHOLDER": "Zadajte nové heslo",
+    "CANCEL": "Zrušiť",
+    "SAVE": "Uložiť"
+  },
+  "PROFILE_EDIT": {
+    "CHANGE_BUTTON": "zmeniť",
+    "EDIT_TITLE": "Upraviť",
+    "CANCEL": "Zrušiť",
+    "SAVE": "Uložiť"
+  },
+  "BUSINESS_DASHBOARD": {
+    "CHANGE_LOGO": "Zmeniť logo",
+    "DEFAULT_NAME": "Názov podniku",
+    "DEFAULT_CITY": "Mesto",
+    "EMPLOYEES_COUNT_LABEL": "Zamestnanci",
+    "DETAILS_TITLE": "Údaje o podniku",
+    "BRAND_NAME_LABEL": "Názov prevádzky",
+    "BRAND_NAME_PLACEHOLDER": "Zadajte názov",
+    "CITY_LABEL": "Mesto / Adresa",
+    "CITY_PLACEHOLDER": "Zadajte mesto",
+    "SAVING": "Ukladám...",
+    "SAVE_CHANGES": "Uložiť zmeny",
+    "EMPLOYEES_TITLE": "Zamestnanci",
+    "ADD_NEW": "Pridať nového",
+    "ADD": "Pridať",
+    "NO_EMPLOYEES": "Zatiaľ nemáte žiadnych zamestnancov",
+    "TOOLTIP_QR": "Zobraziť QR kód",
+    "TOOLTIP_INVITE": "Skopírovať pozvánku",
+    "TOOLTIP_EDIT": "Upraviť",
+    "MODAL_EDIT_TITLE": "Upraviť zamestnanca",
+    "MODAL_ADD_TITLE": "Pridať zamestnanca",
+    "LABEL_FIRST_NAME": "Meno",
+    "LABEL_LAST_NAME": "Priezvisko",
+    "LABEL_JOB": "Pozícia",
+    "PLACEHOLDER_JOB": "Napr. Čašník",
+    "CANCEL": "Zrušiť",
+    "SAVE": "Uložiť",
+    "PAY_LINK_LABEL": "Odkaz na platbu",
+    "TOOLTIP_COPY": "Kopírovať odkaz",
+    "DOWNLOAD": "Stiahnuť",
+    "DONE": "Hotovo",
+    "TOOLTIP_DELETE": "Odstrániť",
+    "DELETE_MODAL_TITLE": "Odstrániť zamestnanca?",
+    "DELETE_MODAL_MESSAGE": "Naozaj chcete odstrániť tohto zamestnanca? Táto akcia je nevratná.",
+    "DELETE_CONFIRM": "Odstrániť"
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Administračný panel",
+    "SUBTITLE": "Prehľad výkonnosti platformy Tringelty",
+    "REFRESH": "Obnoviť",
+    "TAB_OVERVIEW": "Prehľad (Dashboard)",
+    "TAB_TRANSACTIONS": "Transakcie",
+    "REVENUE": "Revenue (Zisk)",
+    "TURNOVER": "Turnover (Obrat)",
+    "USERS": "Users",
+    "BUSINESSES": "Businesses",
+    "BUSINESSES_AND_WORKERS": "Podniky a Zamestnanci",
+    "OWNER": "Vlastník",
+    "NO_STRIPE": "No Stripe",
+    "NO_EMPLOYEES": "Žiadni zamestnanci",
+    "TOOLTIP_QR": "Stiahnuť QR kód",
+    "TOOLTIP_LINK": "Kopírovať odkaz na platbu",
+    "HISTORY_TITLE": "História Transakcií",
+    "TOTAL": "Total",
+    "TABLE_DATE": "Dátum",
+    "TABLE_ENTITY": "Podnik / Zamestnanec",
+    "TABLE_AMOUNT": "Suma",
+    "TABLE_FEE": "Poplatok (Fee)",
+    "NO_TRANSACTIONS": "Žiadne transakcie"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Ups! Stránka sa nenašla",
+    "MESSAGE": "Vyzerá to tak, že ste sa stratili. Stránka, ktorú hľadáte, neexistuje alebo bola presunutá.",
+    "BUTTON": "Späť domov"
+  }
+}

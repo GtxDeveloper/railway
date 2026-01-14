@@ -1,0 +1,49 @@
+## Build results
+[Bb]in/
+[Oo]bj/
+/out/
+
+## User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+## Visual Studio
+.vs/
+_ReSharper*/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.DotSettings.user
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Visual Studio Code
+.vscode/
+
+## Mac / Linux
+.DS_Store
+.AppleDouble
+.LSOverride
+*~
+
+## Logs
+*.log
+
+## Docker
+docker-compose.override.yml
+
+## Secrets & Configs
+# Игнорируем development конфиг, если там хранятся локальные пароли
+# appsettings.Development.json
+# Локальные настройки, которых не должно быть в git
+appsettings.Local.json
+.env
+
+## Tests
+TestResults/
+
+## Other
+thumbs.db

@@ -1,0 +1,613 @@
+<div class="max-w-[1600px] px-4 pt-4 w-full mx-auto flex flex-col gap-4 pb-10">
+
+  <div
+    class="bg-white rounded-[2rem] flex flex-col lg:flex-row justify-between items-center p-6 lg:py-12 lg:px-12 gap-8 lg:gap-0 shadow-sm border border-gray-100">
+
+    <div class="flex flex-col sm:flex-row h-full gap-6 items-center text-center sm:text-left">
+
+      <div class="relative group shrink-0 w-fit mx-auto sm:mx-0">
+        <img
+          #logoImg
+          [src]="store.business()?.logoUrl || 'owner.png'"
+          (error)="logoImg.src='owner.png'"
+          alt="Business Logo"
+          class="w-32 h-32 sm:w-40 sm:h-40 rounded-[2rem] object-cover border-4 border-transparent group-hover:border-[#ffc800] transition-all duration-300 shadow-md bg-gray-50"
+        >
+
+        <div
+          (click)="businessLogoInput.click()"
+          class="absolute inset-0 rounded-[2rem] bg-black/50 flex flex-col items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]"
+          [class.opacity-100]="store.isBusinessLogoUploading()"
+          [class.pointer-events-none]="store.isBusinessLogoUploading()"
+        >
+          @if (store.isBusinessLogoUploading()) {
+            <svg class="animate-spin h-8 w-8 text-[#ffc800]" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-1" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span class="text-white text-xs font-bold raleway">
+              {{ 'BUSINESS_DASHBOARD.CHANGE_LOGO' | translate }}
+            </span>
+          }
+        </div>
+
+        <input
+          #businessLogoInput
+          type="file"
+          class="hidden"
+          accept="image/*"
+          (change)="onLogoSelected($event)"
+        >
+      </div>
+
+      <div class="flex flex-col">
+        <h2 class="raleway font-bold text-3xl sm:text-4xl text-gray-800">
+          {{ store.business()?.name || ('BUSINESS_DASHBOARD.DEFAULT_NAME' | translate) }}
+        </h2>
+        <p class="raleway text-lg text-gray-500 mt-2 sm:mt-1 flex items-center justify-center sm:justify-start gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          {{ store.profile()?.city || ('BUSINESS_DASHBOARD.DEFAULT_CITY' | translate) }}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+      <div
+        class="flex bg-[#ffc800] rounded-3xl py-4 px-8 justify-between lg:justify-center gap-4 flex-row w-full items-center shadow-md shadow-yellow-500/20">
+        <div class="p-2 bg-white/30 rounded-full text-black">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col items-end lg:items-start">
+          <p class="raleway text-sm font-bold opacity-80 uppercase tracking-wide">
+            {{ 'BUSINESS_DASHBOARD.EMPLOYEES_COUNT_LABEL' | translate }}
+          </p>
+          <h3 class="raleway text-3xl font-extrabold text-black">
+            {{ store.workers().length }}
+          </h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div
+    class="bg-[#53b5b0] px-6 py-8 lg:p-10 flex flex-col xl:flex-row items-start justify-between rounded-[2rem] gap-12 xl:gap-16 min-h-[600px] shadow-lg">
+
+    <div class="w-full xl:w-1/3 flex flex-col gap-6 lg:sticky top-4">
+
+      <h3 class="text-white font-bold raleway text-2xl flex items-center gap-3">
+        <div class="p-2 bg-white/20 rounded-xl">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+        </div>
+        {{ 'BUSINESS_DASHBOARD.DETAILS_TITLE' | translate }}
+      </h3>
+
+      <div class="flex flex-col gap-5 bg-white/10 p-6 rounded-3xl border border-white/10">
+
+        <div class="flex flex-col gap-2">
+          <label class="text-white raleway text-sm font-bold ml-2">
+            {{ 'BUSINESS_DASHBOARD.BRAND_NAME_LABEL' | translate }}
+          </label>
+          <input
+            type="text"
+            [ngModel]="formBrandName()"
+            (ngModelChange)="formBrandName.set($event)"
+            class="w-full bg-white rounded-2xl px-5 py-4 raleway font-bold text-gray-800 focus:outline-none focus:ring-4 focus:ring-[#ffc800]"
+            [placeholder]="'BUSINESS_DASHBOARD.BRAND_NAME_PLACEHOLDER' | translate">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-white raleway text-sm font-bold ml-2">
+            {{ 'BUSINESS_DASHBOARD.CITY_LABEL' | translate }}
+          </label>
+          <input
+            type="text"
+            [ngModel]="formCity()"
+            (ngModelChange)="formCity.set($event)"
+            class="w-full bg-white rounded-2xl px-5 py-4 raleway font-bold text-gray-800 focus:outline-none focus:ring-4 focus:ring-[#ffc800]"
+            [placeholder]="'BUSINESS_DASHBOARD.CITY_PLACEHOLDER' | translate">
+        </div>
+
+      </div>
+
+      <button
+        (click)="saveBusiness()"
+        [disabled]="isSaving()"
+        class="flex mt-2 py-4 bg-[#ffc800] rounded-full w-full justify-center items-center gap-2 raleway text-xl font-bold hover:bg-white hover:text-[#ffc800] transition-all duration-300 shadow-xl hover:-translate-y-1 active:scale-95 hover:cursor-pointer text-black disabled:opacity-50 disabled:cursor-wait disabled:transform-none">
+
+        @if (isSaving()) {
+          <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none"
+               viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>{{ 'BUSINESS_DASHBOARD.SAVING' | translate }}</span>
+        } @else {
+          <span>{{ 'BUSINESS_DASHBOARD.SAVE_CHANGES' | translate }}</span>
+        }
+      </button>
+    </div>
+
+    <div class="hidden xl:block w-[2px] bg-white/10 self-stretch rounded-full mx-2"></div>
+
+    <div class="w-full xl:w-2/3 flex flex-col h-full min-h-[500px]">
+
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-white font-bold raleway text-2xl flex items-center gap-3">
+          <div class="p-2 bg-white/20 rounded-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+          {{ 'BUSINESS_DASHBOARD.EMPLOYEES_TITLE' | translate }}
+        </h3>
+
+        <button
+          (click)="addWorker()"
+          class="bg-[#ffc800] hover:bg-white text-black hover:text-[#ffc800] rounded-full px-5 sm:px-8 py-3 font-bold raleway text-sm sm:text-lg transition-all shadow-lg hover:shadow-xl flex items-center gap-2 active:scale-95 hover:-translate-y-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span class="hidden sm:inline">{{ 'BUSINESS_DASHBOARD.ADD_NEW' | translate }}</span>
+          <span class="sm:hidden">{{ 'BUSINESS_DASHBOARD.ADD' | translate }}</span>
+        </button>
+      </div>
+
+      <div
+        class="w-full grow overflow-y-auto no-scrollbar relative rounded-3xl bg-white/5 border border-white/10 p-4 sm:p-6"
+        style="mask-image: linear-gradient(to bottom, transparent 0%, black 20px, black calc(100% - 20px), transparent 100%);
+                  -webkit-mask-image: -webkit-linear-gradient(top, transparent 0%, black 20px, black calc(100% - 20px), transparent 100%);">
+
+        @if (store.workers().length === 0) {
+          <div class="flex flex-col items-center justify-center h-[300px] text-white/50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mb-4 opacity-50" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            </svg>
+            <p class="raleway text-xl font-medium text-center">
+              {{ 'BUSINESS_DASHBOARD.NO_EMPLOYEES' | translate }}
+            </p>
+          </div>
+        }
+
+        @for (worker of store.workers(); track worker.id) {
+          <div class="mb-3 last:mb-0 group">
+            <div
+              class="h-[85px] w-full bg-white rounded-[1.5rem] shadow-sm flex items-center justify-between pl-3 pr-4 sm:pr-6 border border-gray-100 transition-all hover:scale-[1.01] hover:shadow-md">
+
+              <div class="flex items-center gap-4 overflow-hidden">
+
+                <div class="relative w-14 h-14 shrink-0 cursor-pointer group/avatar"
+                     (click)="triggerWorkerInput(worker.id)">
+
+                  <img
+                    #workerAvatar
+                    [src]="worker.avatarUrl || 'worker.png'"
+                    (error)="workerAvatar.src='worker.png'"
+                    alt="Worker"
+                    class="w-full h-full rounded-full object-cover border-2 border-gray-100 bg-gray-50 group-hover/avatar:brightness-75 transition-all"
+                  >
+
+                  @if (store.isWorkerAvatarUploading() === worker.id) {
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full">
+                      <svg class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                           viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
+                  } @else {
+                    <div
+                      class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white drop-shadow-md" fill="none"
+                           viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                      </svg>
+                    </div>
+                  }
+                </div>
+
+                <input
+                  type="file"
+                  [id]="'file-input-' + worker.id"
+                  class="hidden"
+                  accept="image/*"
+                  (change)="onWorkerAvatarSelected($event, worker.id)"
+                >
+
+                <div class="flex flex-col justify-center overflow-hidden">
+                  <span
+                    class="font-bold raleway text-gray-800 text-lg truncate group-hover:text-[#2a9d8f] transition-colors">
+                    {{ worker.name }}
+                  </span>
+                  <span class="text-xs raleway text-gray-400 truncate uppercase tracking-widest font-bold">
+                    {{ worker.job }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1 sm:gap-2">
+                @if (worker.isOnboarded) {
+                  <button
+                    (click)="openQrModal(worker)"
+                    [disabled]="loadingQrForWorkerId() === worker.id"
+                    class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded-full transition-all active:scale-90 disabled:opacity-50"
+                    [title]="'BUSINESS_DASHBOARD.TOOLTIP_QR' | translate">
+
+                    @if (loadingQrForWorkerId() === worker.id) {
+                      <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                           viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    } @else {
+                      <svg fill="#808080" stroke="#808080" width="24px" height="24px" viewBox="0 0 24 24"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M5,15v2H3V15ZM3,21H5V19H3Zm2-4v2H7V17Zm4-6H7v2H5v2H9ZM3,11v2H5V11Zm6,8H7v2h5V19H11V17H9ZM13,4H11V6h2Zm-2,7h2V8H11ZM4,9A1,1,0,0,1,3,8V4A1,1,0,0,1,4,3H8A1,1,0,0,1,9,4V8A1,1,0,0,1,8,9ZM5,7H7V5H5ZM21,4v8H19V9H16a1,1,0,0,1-1-1V4a1,1,0,0,1,1-1h4A1,1,0,0,1,21,4ZM19,5H17V7h2Zm2,11v4a1,1,0,0,1-1,1H16a1,1,0,0,1-1-1V17H11V13h2v2h1V11h2v4h4A1,1,0,0,1,21,16Zm-2,1H17v2h2Z"/>
+                      </svg>
+                    }
+                  </button>
+                }
+                @if (!worker.isLinked) {
+                  <button
+                    (click)="inviteWorker(worker.id)"
+                    [disabled]="store.isInviting() === worker.id"
+                    class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-500 rounded-full transition-all active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    [title]="'BUSINESS_DASHBOARD.TOOLTIP_INVITE' | translate">
+
+                    @if (store.isInviting() === worker.id) {
+                      <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                           viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    } @else {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                      </svg>
+                    }
+                  </button>
+                }
+                <button
+                  (click)="openEditModal(worker.id)"
+                  class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#2a9d8f] rounded-full transition-all active:scale-90"
+                  [title]="'BUSINESS_DASHBOARD.TOOLTIP_EDIT' | translate">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                  </svg>
+                </button>
+                <button
+                  (click)="confirmDelete(worker.id)"
+                  class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-red-500 rounded-full transition-all active:scale-90"
+                  title="Delete">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        }
+
+        <div class="h-8"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+@if (isEditModalOpen()) {
+  <div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+
+    <div
+      class="bg-[#27a19b] w-full max-w-lg p-6 md:p-8 rounded-[30px] md:rounded-[40px] shadow-2xl relative flex flex-col gap-4 md:gap-6"
+      (click)="$event.stopPropagation()">
+
+      <h2 class="text-2xl md:text-3xl text-white font-bold text-center raleway">
+        {{ 'BUSINESS_DASHBOARD.MODAL_EDIT_TITLE' | translate }}
+      </h2>
+
+      <div class="flex flex-col gap-4">
+
+        <div class="flex flex-col gap-1">
+          <span class="ml-5 text-white text-sm font-bold raleway">
+             {{ 'BUSINESS_DASHBOARD.LABEL_FIRST_NAME' | translate }}
+          </span>
+          <input
+            type="text"
+            [ngModel]="editFirstName()"
+            (ngModelChange)="editFirstName.set($event)"
+            [placeholder]="'BUSINESS_DASHBOARD.LABEL_FIRST_NAME' | translate"
+            class="w-full bg-white px-4 py-3 md:px-5 md:py-4 rounded-full raleway font-medium text-lg md:text-xl border-3 border-transparent focus:outline-none focus:border-[#ffc800] focus:ring-2 focus:ring-[#ffc800]/50 transition-all shadow-sm"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="ml-5 text-white text-sm font-bold raleway">
+             {{ 'BUSINESS_DASHBOARD.LABEL_LAST_NAME' | translate }}
+          </span>
+          <input
+            type="text"
+            [ngModel]="editLastName()"
+            (ngModelChange)="editLastName.set($event)"
+            [placeholder]="'BUSINESS_DASHBOARD.LABEL_LAST_NAME' | translate"
+            class="w-full bg-white px-4 py-3 md:px-5 md:py-4 rounded-full raleway font-medium text-lg md:text-xl border-3 border-transparent focus:outline-none focus:border-[#ffc800] focus:ring-2 focus:ring-[#ffc800]/50 transition-all shadow-sm"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="ml-5 text-white text-sm font-bold raleway">
+             {{ 'BUSINESS_DASHBOARD.LABEL_JOB' | translate }}
+          </span>
+          <input
+            type="text"
+            [ngModel]="editJob()"
+            (ngModelChange)="editJob.set($event)"
+            [placeholder]="'BUSINESS_DASHBOARD.PLACEHOLDER_JOB' | translate"
+            class="w-full bg-white px-4 py-3 md:px-5 md:py-4 rounded-full raleway font-medium text-lg md:text-xl border-3 border-transparent focus:outline-none focus:border-[#ffc800] focus:ring-2 focus:ring-[#ffc800]/50 transition-all shadow-sm"
+          />
+        </div>
+
+      </div>
+
+      <div class="flex gap-3 md:gap-4 mt-2">
+        <button
+          (click)="closeEditModal()"
+          class="flex-1 py-3 md:py-4 rounded-full bg-white text-[#27a19b] font-bold text-lg md:text-xl raleway hover:bg-gray-100 transition-colors shadow-md">
+          {{ 'BUSINESS_DASHBOARD.CANCEL' | translate }}
+        </button>
+
+        <button
+          (click)="saveWorker()"
+          [disabled]="isEditSaving()"
+          class="flex-1 py-3 md:py-4 rounded-full bg-[#ffc800] text-black font-bold text-lg md:text-xl raleway hover:bg-[#e6b400] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center transition-colors">
+
+          @if (isEditSaving()) {
+            <svg class="animate-spin h-6 w-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            {{ 'BUSINESS_DASHBOARD.SAVE' | translate }}
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+@if (isAddModalOpen()) {
+  <div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+
+    <div
+      class="bg-[#27a19b] w-full max-w-lg p-6 md:p-8 rounded-[30px] md:rounded-[40px] shadow-2xl relative flex flex-col gap-4 md:gap-6"
+      (click)="$event.stopPropagation()">
+
+      <h2 class="text-2xl md:text-3xl text-white font-bold text-center raleway">
+        {{ 'BUSINESS_DASHBOARD.MODAL_ADD_TITLE' | translate }}
+      </h2>
+
+      <div class="flex flex-col gap-4">
+
+        <div class="flex flex-col gap-1">
+          <span class="ml-5 text-white text-sm font-bold raleway">
+             {{ 'BUSINESS_DASHBOARD.LABEL_FIRST_NAME' | translate }}
+          </span>
+          <input
+            type="text"
+            [ngModel]="addFirstName()"
+            (ngModelChange)="addFirstName.set($event)"
+            [placeholder]="'BUSINESS_DASHBOARD.LABEL_FIRST_NAME' | translate"
+            class="w-full bg-white px-4 py-3 md:px-5 md:py-4 rounded-full raleway font-medium text-lg md:text-xl border-3 border-transparent focus:outline-none focus:border-[#ffc800] focus:ring-2 focus:ring-[#ffc800]/50 transition-all shadow-sm"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="ml-5 text-white text-sm font-bold raleway">
+             {{ 'BUSINESS_DASHBOARD.LABEL_LAST_NAME' | translate }}
+          </span>
+          <input
+            type="text"
+            [ngModel]="addLastName()"
+            (ngModelChange)="addLastName.set($event)"
+            [placeholder]="'BUSINESS_DASHBOARD.LABEL_LAST_NAME' | translate"
+            class="w-full bg-white px-4 py-3 md:px-5 md:py-4 rounded-full raleway font-medium text-lg md:text-xl border-3 border-transparent focus:outline-none focus:border-[#ffc800] focus:ring-2 focus:ring-[#ffc800]/50 transition-all shadow-sm"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="ml-5 text-white text-sm font-bold raleway">
+            {{ 'BUSINESS_DASHBOARD.LABEL_JOB' | translate }}
+          </span>
+          <input
+            type="text"
+            [ngModel]="addJob()"
+            (ngModelChange)="addJob.set($event)"
+            [placeholder]="'BUSINESS_DASHBOARD.PLACEHOLDER_JOB' | translate"
+            class="w-full bg-white px-4 py-3 md:px-5 md:py-4 rounded-full raleway font-medium text-lg md:text-xl border-3 border-transparent focus:outline-none focus:border-[#ffc800] focus:ring-2 focus:ring-[#ffc800]/50 transition-all shadow-sm"
+          />
+        </div>
+
+      </div>
+
+      <div class="flex gap-3 md:gap-4 mt-2">
+        <button
+          (click)="closeAddModal()"
+          class="flex-1 py-3 md:py-4 rounded-full bg-white text-[#27a19b] font-bold text-lg md:text-xl raleway hover:bg-gray-100 transition-colors shadow-md">
+          {{ 'BUSINESS_DASHBOARD.CANCEL' | translate }}
+        </button>
+
+        <button
+          (click)="saveNewWorker()"
+          [disabled]="isAddSaving()"
+          class="flex-1 py-3 md:py-4 rounded-full bg-[#ffc800] text-black font-bold text-lg md:text-xl raleway hover:bg-[#e6b400] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center transition-colors">
+
+          @if (isAddSaving()) {
+            <svg class="animate-spin h-6 w-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            {{ 'BUSINESS_DASHBOARD.ADD' | translate }}
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+@if (isQrModalOpen() && qrModalData(); as data) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden relative flex flex-col items-center p-6 sm:p-8">
+
+      <button
+        (click)="closeQrModal()"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <h3 class="text-2xl font-bold raleway text-gray-800 text-center mb-6">
+        {{ data.name }}
+      </h3>
+
+      <div class="bg-white p-2 rounded-xl border-2 border-gray-100 shadow-inner mb-6 relative group">
+        <img [src]="data.qrUrl" alt="QR Code" class="w-64 h-64 object-contain rounded-lg">
+      </div>
+
+      <div class="w-full">
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 text-center">
+          {{ 'BUSINESS_DASHBOARD.PAY_LINK_LABEL' | translate }}
+        </label>
+
+        <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl p-2 pl-4">
+          <div class="truncate text-gray-600 text-sm flex-1 font-mono">
+            {{ data.payLink }}
+          </div>
+
+          <button
+            (click)="copyToClipboard(data.payLink)"
+            class="bg-white text-gray-600 hover:text-[#2a9d8f] hover:border-[#2a9d8f] border border-gray-200 p-2 rounded-lg transition-all active:scale-95 shadow-sm"
+            [title]="'BUSINESS_DASHBOARD.TOOLTIP_COPY' | translate">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 w-full flex gap-3">
+
+        <button
+          (click)="downloadQr(data)"
+          class="flex-1 py-3 rounded-xl font-bold raleway bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          {{ 'BUSINESS_DASHBOARD.DOWNLOAD' | translate }}
+        </button>
+
+        <button
+          (click)="closeQrModal()"
+          class="flex-1 py-3 rounded-xl font-bold raleway bg-[#ffc800] text-gray-900 hover:bg-[#e6b400] transition-colors shadow-md">
+          {{ 'BUSINESS_DASHBOARD.DONE' | translate }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+@if (deletingWorkerId()) {
+  <div class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+
+    <div class="bg-white w-full max-w-md p-6 rounded-[30px] shadow-2xl relative flex flex-col gap-6 items-center text-center"
+         (click)="$event.stopPropagation()">
+
+      <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold raleway text-gray-800">
+          {{ 'BUSINESS_DASHBOARD.DELETE_MODAL_TITLE' | translate }}
+        </h2>
+        <p class="text-gray-500 raleway mt-2">
+          {{ 'BUSINESS_DASHBOARD.DELETE_MODAL_MESSAGE' | translate }}
+        </p>
+      </div>
+
+      <div class="flex gap-3 w-full mt-2">
+        <button
+          (click)="closeDeleteModal()"
+          class="flex-1 py-3 rounded-full bg-gray-100 text-gray-700 font-bold text-lg raleway hover:bg-gray-200 transition-colors">
+          {{ 'BUSINESS_DASHBOARD.CANCEL' | translate }}
+        </button>
+
+        <button
+          (click)="deleteWorker()"
+          class="flex-1 py-3 rounded-full bg-red-500 text-white font-bold text-lg raleway hover:bg-red-600 shadow-lg shadow-red-500/30 transition-colors flex justify-center items-center gap-2">
+
+          @if (store.isLoading()) {
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            {{ 'BUSINESS_DASHBOARD.DELETE_CONFIRM' | translate }}
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

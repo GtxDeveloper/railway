@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('../public/fonts/Raleway-Regular.ttf') format('TrueType');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Raleway';
+  src: url('../public/fonts/Raleway-Medium.ttf') format('TrueType');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Raleway';
+  src: url('../public/fonts/Raleway-SemiBold.ttf') format('TrueType');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Raleway';
+  src: url('../public/fonts/Raleway-Bold.ttf') format('TrueType');
+  font-weight: 700;
+  font-style: normal;
+}
+
+.raleway{
+  font-family: 'Raleway', sans-serif;
+}

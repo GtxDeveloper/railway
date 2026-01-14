@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tringelty.Api", "Tringelty.Api\Tringelty.Api.csproj", "{044B1541-F498-4C7C-8904-3BBE3316AFAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tringelty.Core", "Tringelty.Core\Tringelty.Core.csproj", "{C88B0AC0-86F5-4414-B0ED-5C0D6D813425}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tringelty.Infrastructure", "Tringelty.Infrastructure\Tringelty.Infrastructure.csproj", "{3BDD0DDE-DD4C-4D02-8DB0-E2F0E911F7E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{044B1541-F498-4C7C-8904-3BBE3316AFAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044B1541-F498-4C7C-8904-3BBE3316AFAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044B1541-F498-4C7C-8904-3BBE3316AFAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044B1541-F498-4C7C-8904-3BBE3316AFAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C88B0AC0-86F5-4414-B0ED-5C0D6D813425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C88B0AC0-86F5-4414-B0ED-5C0D6D813425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C88B0AC0-86F5-4414-B0ED-5C0D6D813425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C88B0AC0-86F5-4414-B0ED-5C0D6D813425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BDD0DDE-DD4C-4D02-8DB0-E2F0E911F7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BDD0DDE-DD4C-4D02-8DB0-E2F0E911F7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BDD0DDE-DD4C-4D02-8DB0-E2F0E911F7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BDD0DDE-DD4C-4D02-8DB0-E2F0E911F7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

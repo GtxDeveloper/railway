@@ -1,0 +1,133 @@
+<header class="bg-[#27a19b] relative z-50">
+
+  <div class="max-w-412 mx-auto px-4 pt-4 pb-4 flex justify-between items-center">
+
+    <a [routerLink]="['/dashboard']" (click)="closeMenu()">
+      <img class="logo h-12 w-auto object-contain" src="tringelty.png" alt="Tringelty">
+    </a>
+
+    <div class="hidden lg:flex items-center gap-7">
+
+      @if (store.isAuthenticated()){
+        <a [routerLink]="['/dashboard']" class="raleway text-white font-bold text-2xl hover:text-[#ffc800] hover:underline transition ease-in">
+          {{ 'HEADER.PROFILE' | translate }}
+        </a>
+
+        @if (dashboardStore.isOwner()){
+          <a [routerLink]="['/dashboard/business']" class="raleway text-white font-bold text-2xl hover:text-[#ffc800] hover:underline transition ease-in">
+            {{ 'HEADER.BUSINESS' | translate }}
+          </a>
+        }
+
+        @if (store.isAdmin()){
+          <a [routerLink]="['/dashboard/admin']" class="raleway text-white font-bold text-2xl hover:text-[#ffc800] hover:underline transition ease-in">
+            {{ 'HEADER.ADMIN' | translate }}
+          </a>
+        }
+
+        <a (click)="store.logout()" class="cursor-pointer raleway bg-[#ffc800] font-bold text-xl rounded-full px-10 py-4 hover:bg-white hover:text-[#ffc800] transition ease-in text-black">
+          {{ 'HEADER.LOGOUT' | translate }}
+        </a>
+
+      } @else {
+        <div class="flex items-center gap-3">
+          <a [routerLink]="['/choose']" class="raleway bg-[#ffc800] font-bold text-xl rounded-full px-10 py-4 hover:bg-white hover:text-[#ffc800] transition ease-in text-black">
+            {{ 'HEADER.REGISTER' | translate }}
+          </a>
+          <a [routerLink]="['/login']" class="raleway bg-white text-[#ffc800] font-bold text-xl rounded-full px-10 py-4 hover:bg-[#ffc800] hover:text-black transition ease-in">
+            {{ 'HEADER.LOGIN' | translate }}
+          </a>
+        </div>
+      }
+
+      <div class="flex items-center gap-2 raleway font-bold text-lg select-none">
+        <span
+          (click)="switchLang('sk')"
+          class="cursor-pointer hover:text-white transition-colors"
+          [class.text-white]="settings.locale() === 'sk'"
+          [class.text-white/50]="settings.locale() !== 'sk'">
+        SK
+        </span>
+        <span class="text-white/40">|</span>
+        <span
+          (click)="switchLang('en')"
+          class="cursor-pointer hover:text-white transition-colors"
+          [class.text-white]="settings.locale() === 'en'"
+          [class.text-white/50]="settings.locale() !== 'en'">
+        EN
+        </span>
+      </div>
+    </div>
+
+
+    <div class="flex lg:hidden">
+      <button (click)="toggleMenu()" type="button" class="text-white hover:text-[#ffc800] focus:outline-none p-2">
+        <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          @if (isMenuOpen()) {
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          } @else {
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          }
+        </svg>
+      </button>
+    </div>
+
+  </div>
+
+  @if (isMenuOpen()) {
+    <div class="lg:hidden bg-[#23908b] border-t border-white/10 animate-fade-in absolute w-full left-0 top-full shadow-xl">
+      <div class="px-6 py-6 space-y-4 flex flex-col items-center">
+
+        @if (store.isAuthenticated()){
+          <a [routerLink]="['/dashboard']" (click)="closeMenu()" class="raleway text-white font-bold text-xl py-2 hover:text-[#ffc800]">
+            {{ 'HEADER.PROFILE' | translate }}
+          </a>
+
+          @if (dashboardStore.isOwner()){
+            <a [routerLink]="['/dashboard/business']" (click)="closeMenu()" class="raleway text-white font-bold text-xl py-2 hover:text-[#ffc800]">
+              {{ 'HEADER.BUSINESS' | translate }}
+            </a>
+          }
+
+          @if (store.isAdmin()){
+            <a [routerLink]="['/dashboard/admin']" (click)="closeMenu()" class="raleway text-white font-bold text-xl py-2 hover:text-[#ffc800]">
+              {{ 'HEADER.ADMIN' | translate }}
+            </a>
+          }
+
+          <div class="w-full h-px bg-white/20 my-2"></div>
+
+          <button (click)="store.logout(); closeMenu()" class="w-full raleway bg-[#ffc800] text-black font-bold text-xl rounded-full px-6 py-3 hover:bg-white hover:text-[#ffc800] transition ease-in">
+            {{ 'HEADER.LOGOUT' | translate }}
+          </button>
+
+        } @else {
+          <a [routerLink]="['/register']" (click)="closeMenu()" class="w-full text-center raleway bg-[#ffc800] text-black font-bold text-xl rounded-full px-6 py-3 hover:bg-white hover:text-[#ffc800] transition ease-in">
+            {{ 'HEADER.REGISTER' | translate }}
+          </a>
+          <a [routerLink]="['/login']" (click)="closeMenu()" class="w-full text-center raleway bg-white text-[#ffc800] font-bold text-xl rounded-full px-6 py-3 hover:bg-[#ffc800] hover:text-black transition ease-in">
+            {{ 'HEADER.LOGIN' | translate }}
+          </a>
+        }
+
+        <div class="flex items-center gap-4 raleway font-bold text-2xl select-none mb-2">
+           <span
+             (click)="switchLang('sk')"
+             class="cursor-pointer px-2 py-1"
+             [class.text-white]="settings.locale() === 'sk'"
+             [class.text-white/50]="settings.locale() !== 'sk'">
+          SK
+          </span>
+          <span class="text-white/40">|</span>
+          <span
+            (click)="switchLang('en')"
+            class="cursor-pointer px-2 py-1"
+            [class.text-white]="settings.locale() === 'en'"
+            [class.text-white/50]="settings.locale() !== 'en'">
+          EN
+          </span>
+        </div>
+      </div>
+    </div>
+  }
+</header>

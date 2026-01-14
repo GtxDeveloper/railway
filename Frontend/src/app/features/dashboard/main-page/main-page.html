@@ -1,0 +1,339 @@
+<div class="max-w-[1600px] px-4 pt-4 w-full mx-auto flex flex-col gap-4 pb-10">
+
+  <div
+    class="bg-white rounded-[2rem] flex flex-col lg:flex-row justify-between items-center p-6 lg:py-16 lg:px-12 gap-8 lg:gap-0">
+
+    <div class="flex flex-col sm:flex-row h-full gap-6 items-center text-center sm:text-left">
+      <div class="relative group shrink-0 w-fit mx-auto sm:mx-0">
+
+        <img
+          [src]="store.profile()?.avatarUrl || 'owner.png'"
+          alt="Avatar"
+          class="w-32 h-32 sm:w-48 sm:h-48 rounded-full object-cover border-4 border-transparent group-hover:border-[#ffc800] transition-all duration-300 shadow-md"
+        >
+
+        <div
+          (click)="fileInput.click()"
+          class="absolute inset-0 rounded-full bg-black/50 flex flex-col items-center justify-center cursor-pointer
+           opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]"
+          [class.opacity-100]="store.isAvatarUploading()"
+          [class.pointer-events-none]="store.isAvatarUploading()"
+        >
+
+          @if (store.isAvatarUploading()) {
+            <svg class="animate-spin h-8 w-8 text-[#ffc800]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span class="text-white text-xs font-bold raleway">
+              {{ 'DASHBOARD.CHANGE_AVATAR' | translate }}
+            </span>
+          }
+        </div>
+
+        <input
+          #fileInput
+          type="file"
+          class="hidden"
+          accept="image/png, image/jpeg, image/jpg"
+          (change)="onFileSelected($event)"
+        >
+
+      </div>
+      <div class="flex flex-col">
+        <h2 class="raleway font-medium text-3xl sm:text-4xl">
+          {{ store.profile()?.firstName }} {{ store.profile()?.lastName }}
+          <span class="block sm:inline">— {{ store.currentWorker()?.job }}</span>
+        </h2>
+        <p class="raleway text-lg text-gray-500 mt-2 sm:mt-0">
+          <span class="font-bold text-gray-700 me-3">{{ store.profile()?.brandName }}</span>  {{ store.profile()?.city }}
+        </p>
+      </div>
+    </div>
+
+    @if (store.isOnboarded()) {
+      <div class="flex w-full lg:max-w-[450px] gap-4 flex-col">
+        <div class="flex flex-col sm:flex-row gap-4 w-full">
+          <div
+            (click)="toggleBalanceDetails()"
+            (mouseleave)="isBalanceOpen.set(false)"
+            class="relative group flex bg-[#ffc800] rounded-3xl py-4 px-5 justify-between flex-row w-full items-center
+         cursor-pointer select-none transition-all duration-200
+         hover:bg-[#e6b400] active:scale-95"
+          >
+            <div class="flex items-center">
+              <p class="raleway text-md sm:text-lg font-medium me-2 text-black/80">
+                {{ 'DASHBOARD.BALANCE' | translate }}
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <h3 class="raleway text-lg sm:text-xl font-bold text-black">
+                {{ store.balance()?.available | number:'1.2-2' }} €
+              </h3>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2.5"
+                stroke="currentColor"
+                class="w-5 h-5 text-black/70 transition-transform duration-300 group-hover:rotate-180"
+                [class.rotate-180]="isBalanceOpen()"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+              </svg>
+            </div>
+
+            <div
+              class="absolute top-full left-0 w-full mt-2 transition-all duration-300 ease-in-out z-20 translate-y-2
+           opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0"
+              [class.opacity-100]="isBalanceOpen()"
+              [class.visible]="isBalanceOpen()"
+              [class.translate-y-0]="isBalanceOpen()"
+            >
+              <div
+                class="bg-white border-4 border-[#ffc800] rounded-2xl p-4 shadow-xl flex flex-col items-center justify-center cursor-default"
+                (click)="$event.stopPropagation()">
+                <span
+                  class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">
+                  {{ 'DASHBOARD.PENDING' | translate }}
+                </span>
+                <span class="text-xl font-bold text-gray-800 raleway">
+                  {{ store.balance()?.pending | number:'1.2-2' }} €
+                </span>
+                <div
+                  class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-t-4 border-l-4 border-[#ffc800] transform rotate-45"></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="flex bg-[#ffc800] rounded-3xl py-4 px-4 justify-between flex-row w-full items-center">
+            <p class="raleway text-sm sm:text-lg font-medium me-1">
+              {{ 'DASHBOARD.EARNINGS' | translate }}
+            </p>
+            <h3 class="raleway text-lg sm:text-xl font-bold">{{ store.summary().totalEarnings }}€</h3>
+          </div>
+        </div>
+
+        <button
+          (click)="getLoginLink()"
+          [disabled]="store.isRedirecting()"
+          class="flex py-4 bg-[#ffc800] rounded-full justify-center items-center w-full
+         border-3 border-[#ffc800] transition ease-in
+         hover:bg-white hover:text-[#ffc800] hover:cursor-pointer
+         disabled:opacity-70 disabled:cursor-wait disabled:hover:bg-[#ffc800] disabled:hover:text-black">
+
+          @if (store.isRedirecting()) {
+            <svg class="animate-spin -ml-1 mr-3 h-6 w-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <h4 class="raleway text-center text-xl sm:text-2xl font-bold">
+              {{ 'DASHBOARD.REDIRECTING' | translate }}
+            </h4>
+          } @else {
+            <h4 class="raleway text-center text-xl sm:text-2xl font-bold">
+              {{ 'DASHBOARD.PAYOUT' | translate }}
+            </h4>
+          }
+        </button>
+      </div>
+    }
+  </div>
+
+  <div
+    class="bg-[#53b5b0] px-6 py-8 lg:p-10 flex flex-col xl:flex-row items-center xl:items-start justify-between rounded-[2rem] gap-12 xl:gap-8 min-h-[600px]">
+
+    <div class="w-full max-w-md xl:max-w-[400px]">
+      <app-profile-edit-field
+        [control]="firstNameControl"
+        [label]="'DASHBOARD.FIRST_NAME' | translate"
+        type="text"
+        [placeholder]="store.profile()?.firstName ?? ('DASHBOARD.FIRST_NAME' | translate)">
+      </app-profile-edit-field>
+      <app-profile-edit-field
+        [control]="lastNameControl"
+        [label]="'DASHBOARD.LAST_NAME' | translate"
+        type="text"
+        [placeholder]="store.profile()?.lastName ?? ('DASHBOARD.LAST_NAME' | translate)">
+      </app-profile-edit-field>
+      <app-profile-edit-field
+        [control]="phoneControl"
+        [label]="'DASHBOARD.PHONE' | translate"
+        type="text"
+        [placeholder]="store.profile()?.phoneNumber || ('DASHBOARD.PHONE' | translate)">
+      </app-profile-edit-field>
+      <app-profile-edit-field
+        [control]="roleControl"
+        [label]="'DASHBOARD.JOB_TITLE' | translate"
+        type="text"
+        [placeholder]="store.currentWorker()?.job ?? ('DASHBOARD.JOB_TITLE' | translate)">
+      </app-profile-edit-field>
+      <button (click)="saveProfile()"
+              [disabled]="isSaving()"
+              class="flex mt-8 py-4 bg-[#ffc800] rounded-full w-full justify-center raleway text-lg sm:text-xl font-bold flex-row hover:bg-white hover:text-[#ffc800] transition ease-in disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer">
+        @if (isSaving()) {
+          {{ 'DASHBOARD.SAVING' | translate }}
+        } @else {
+          {{ 'DASHBOARD.SAVE_CHANGES' | translate }}
+        }
+      </button>
+    </div>
+
+    <div class="w-full flex flex-col items-center">
+      <h3 class="text-white font-bold raleway text-center text-2xl mb-2">
+        {{ 'DASHBOARD.QR_TITLE' | translate }}
+      </h3>
+
+      <div
+        class="relative w-full max-w-[350px] aspect-square mx-auto flex justify-center items-center rounded-[32px] overflow-hidden border-4 border-white bg-[#53b5b0] shadow-lg">
+
+        @if (store.isOnboarded()) {
+          @if (store.isQrLoading() || !store.qrCodeUrl()) {
+            <img src="qrbg.png" alt="Loading Background"
+                 class="absolute inset-0 w-full h-full object-cover blur-lg scale-110">
+            <div class="relative z-10 flex flex-col items-center gap-3">
+              <svg class="animate-spin h-10 w-10 sm:h-12 sm:w-12 text-white" xmlns="http://www.w3.org/2000/svg"
+                   fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span class="raleway text-white font-bold text-lg">
+                {{ 'DASHBOARD.LOADING' | translate }}
+              </span>
+            </div>
+          } @else {
+            <div class="relative w-full h-full group">
+              <img [src]="store.qrCodeUrl()" alt="QR Code" class="w-full h-full object-cover">
+              <div
+                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-30 backdrop-blur-sm">
+                <button (click)="downloadQrImage()"
+                        class="bg-[#ffc800] hover:bg-white text-black hover:cursor-pointer hover:text-[#ffc800] rounded-full p-4 transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
+                        [title]="'DASHBOARD.DOWNLOAD_QR' | translate">
+                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2">
+                    <path d="M12 15V4M12 15L9 12M12 15L15 12M6 20H18" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          }
+        } @else {
+          <img src="qrbg.png" alt="Blurred Background"
+               class="absolute inset-0 w-full h-full object-cover blur-lg scale-110">
+          <div class="relative z-10 p-4 text-center">
+            <button (click)="onboard()" [disabled]="store.isOnboarding()"
+                    class="flex items-center justify-center gap-2 mx-auto bg-[#ffc800] text-black raleway font-bold py-3 px-6 sm:px-8 rounded-full shadow-xl text-base sm:text-lg transition-colors hover:bg-white hover:text-[#ffc800]">
+              @if (store.isOnboarding()) {
+                <span>{{ 'DASHBOARD.CONNECTING' | translate }}</span>
+              } @else {
+                <span>{{ 'DASHBOARD.CONNECT_STRIPE' | translate }}</span>
+              }
+            </button>
+          </div>
+        }
+      </div>
+      @if (store.isOnboarded()) {
+        <div class="mt-6 w-full max-w-[400px] animate-fade-in">
+          <label class="text-white/80 text-xs sm:text-sm font-bold raleway uppercase mb-2 block text-center tracking-wider">
+            {{ 'DASHBOARD.PAYMENT_LINK_LABEL' | translate }}
+          </label>
+
+          <div class="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl p-2 pl-4 backdrop-blur-sm transition-colors hover:bg-white/15">
+            <div class="truncate text-white text-sm sm:text-base flex-1 font-mono opacity-90">
+              {{ paymentLink() }}
+            </div>
+
+            <button
+              (click)="copyLink()"
+              class="bg-white/10 hover:bg-[#ffc800] text-white hover:text-black p-2.5 rounded-lg transition-all active:scale-95 shadow-sm"
+              [title]="'DASHBOARD.COPY_LINK' | translate">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="w-full max-w-md xl:max-w-[400px] flex flex-col gap-4">
+
+      <div class="flex flex-col gap-2">
+        <app-email-change-field
+          [currentEmail]="store.profile()?.email || ''"
+          (initChange)="onInitEmail($event)"
+          (confirmChange)="onConfirmEmail($event)">
+        </app-email-change-field>
+        <app-password-change-field
+          (save)="onChangePassword($event)">
+        </app-password-change-field>
+      </div>
+
+      <div class="bg-[#53b5b0] sm:bg-white/10 sm:border sm:border-white/20 rounded-3xl min-h-[230px] flex items-center justify-center p-0 sm:p-4">
+
+        <div class="w-full h-[230px] overflow-y-auto no-scrollbar relative rounded-3xl bg-white/10 border border-white/20 sm:bg-transparent sm:border-none p-4"
+             style="mask-image: linear-gradient(to bottom, transparent 0%, black 15px, black calc(100% - 15px), transparent 100%);
+            -webkit-mask-image: -webkit-linear-gradient(top, transparent 0%, black 15px, black calc(100% - 15px), transparent 100%);">
+
+          @if (store.transactions().length === 0) {
+            <div class="flex flex-col items-center justify-center h-full text-white/70">
+              <p class="raleway text-lg font-medium">
+                {{ 'DASHBOARD.NO_TRANSACTIONS' | translate }}
+              </p>
+            </div>
+          }
+
+          @for (item of store.transactions(); track item.id) {
+            <div class="mb-3 last:mb-0">
+              <div class="h-[65px] w-full bg-white rounded-full shadow-md flex items-center justify-between px-5 border border-gray-100 transition-transform hover:scale-[1.02]">
+
+                <div class="flex flex-col justify-center overflow-hidden mr-2">
+            <span class="font-bold raleway text-gray-800 text-sm truncate">
+              {{ 'DASHBOARD.TRINGELT' | translate }}
+            </span>
+                  <span class="text-xs raleway text-gray-400 truncate">
+              {{ item.createdAt | date:'d.M.yyyy HH:mm' }}
+            </span>
+                </div>
+
+                <div class="font-bold raleway text-sm whitespace-nowrap text-[#2a9d8f]">
+                  +{{ item.workerAmount | number:'1.2-2' }} €
+                </div>
+
+              </div>
+            </div>
+          }
+
+          <div class="h-8"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+@if (showToast()) {
+  <div class="toast-container">
+
+    <div class="toast-icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+
+    <span class="toast-text">
+      {{ 'DASHBOARD.TOAST_COPIED' | translate }}
+    </span>
+
+  </div>
+}

@@ -1,0 +1,46 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+testem.log
+
+# IDEs and Editors
+.idea/
+.project
+.classpath
+.cproject
+.settings/
+.vscode/
+*.sublime-workspace
+
+# Mac / OS
+.DS_Store
+.Thumbs.db
+
+# Visual Studio Code
+.history/
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+testem.log
+typing_stats.json
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment variables (if you use dotenv)
+.env
+.env.local

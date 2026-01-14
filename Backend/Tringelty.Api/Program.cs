@@ -64,22 +64,39 @@ builder.Services.AddSwaggerGen(c =>
 
 // Database Context configuration
 // We use Npgsql provider for PostgreSQL. Connection string is loaded from appsettings.json.
+// 1. Получаем строку
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// --- 🛠 ВРЕМЕННЫЙ DEBUG ЛОГ (УДАЛИТЬ ПОСЛЕ ИСПРАВЛЕНИЯ) 🛠 ---
-Console.WriteLine("=================================================");
-if (string.IsNullOrEmpty(connectionString))
+// 2. ПРОВЕРКА И ИСПРАВЛЕНИЕ ФОРМАТА (ДЛЯ RAILWAY)
+try 
 {
-    Console.WriteLine("🚨 ОШИБКА: Connection String == NULL или пустая!");
+    // Если строка начинается как URL (postgresql://), нам нужно её распарсить
+    if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("postgres"))
+    {
+        var databaseUri = new Uri(connectionString);
+        var userInfo = databaseUri.UserInfo.Split(':');
+        
+        var npgsqlBuilder = new Npgsql.NpgsqlConnectionStringBuilder
+        {
+            Host = databaseUri.Host,
+            Port = databaseUri.Port > 0 ? databaseUri.Port : 5432,
+            Username = userInfo[0],
+            Password = userInfo[1],
+            Database = databaseUri.AbsolutePath.TrimStart('/')
+        };
+        
+        // Перезаписываем строку в правильном формате (Host=...;Password=...)
+        connectionString = npgsqlBuilder.ToString();
+        Console.WriteLine($"✅ Connection String fixed for Npgsql");
+    }
 }
-else
+catch (Exception ex)
 {
-    // Выводим строку, чтобы увидеть, не попал ли туда мусор типа "${{...}}"
-    Console.WriteLine($"✅ Connection String: '{connectionString}'");
+    Console.WriteLine($"⚠️ Ошибка парсинга Connection String: {ex.Message}");
+    // Если упало — пробуем использовать как есть, вдруг сработает
 }
-Console.WriteLine("=================================================");
-// -------------------------------------------------------------
 
+// 3. Подключаем контекст с уже исправленной строкой
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 

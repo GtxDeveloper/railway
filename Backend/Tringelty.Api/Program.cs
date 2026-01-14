@@ -87,7 +87,7 @@ try
         
         // Перезаписываем строку в правильном формате (Host=...;Password=...)
         connectionString = npgsqlBuilder.ToString();
-        Console.WriteLine($"✅ Connection String fixed for Npgsql");
+        Console.WriteLine($"✅ Connection String fixed for Npgsql!");
     }
 }
 catch (Exception ex)

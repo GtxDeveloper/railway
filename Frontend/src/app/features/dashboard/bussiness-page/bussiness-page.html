@@ -1,7 +1,7 @@
 <div class="max-w-[1600px] px-4 pt-4 w-full mx-auto flex flex-col gap-4 pb-10">
 
   <div
-    class="bg-white rounded-[2rem] flex flex-col lg:flex-row justify-between items-center p-6 lg:py-12 lg:px-12 gap-8 lg:gap-0 shadow-sm border border-gray-100">
+    class="bg-white rounded-[2rem] flex flex-col lg:flex-row justify-start items-center p-6 lg:py-12 lg:px-12 gap-8 lg:gap-0 shadow-sm border border-gray-100">
 
     <div class="flex flex-col sm:flex-row h-full gap-6 items-center text-center sm:text-left">
 
@@ -37,6 +37,7 @@
             </svg>
             <span class="text-white text-xs font-bold raleway">
               {{ 'BUSINESS_DASHBOARD.CHANGE_LOGO' | translate }}
+
             </span>
           }
         </div>
@@ -62,27 +63,74 @@
           </svg>
           {{ store.profile()?.city || ('BUSINESS_DASHBOARD.DEFAULT_CITY' | translate) }}
         </p>
+        <div
+          class="flex bg-[#ffc800] rounded-3xl py-2 px-5 mt-2 justify-between lg:justify-center gap-4 flex-row w-full items-center shadow-md shadow-yellow-500/20">
+          <div class="p-2 bg-white/30 rounded-full text-black">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <div class="flex flex-row items-center">
+            <p class="raleway text-sm font-bold mt-1 opacity-80 uppercase tracking-wide">
+              {{ 'BUSINESS_DASHBOARD.EMPLOYEES_COUNT_LABEL' | translate }}
+            </p>
+            <h3 class="raleway text-2xl ms-3 font-extrabold text-black">
+              {{ store.workers().length }}
+            </h3>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-      <div
-        class="flex bg-[#ffc800] rounded-3xl py-4 px-8 justify-between lg:justify-center gap-4 flex-row w-full items-center shadow-md shadow-yellow-500/20">
-        <div class="p-2 bg-white/30 rounded-full text-black">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-        </div>
-        <div class="flex flex-col items-end lg:items-start">
-          <p class="raleway text-sm font-bold opacity-80 uppercase tracking-wide">
-            {{ 'BUSINESS_DASHBOARD.EMPLOYEES_COUNT_LABEL' | translate }}
-          </p>
-          <h3 class="raleway text-3xl font-extrabold text-black">
-            {{ store.workers().length }}
-          </h3>
+    <div class="grid md:ms-auto grid-cols-2 gap-4 w-full lg:w-auto max-w-2xl">
+
+      <div class="bg-[#64bdb8]/10 rounded-2xl p-4 border border-gray-100 flex flex-col justify-center hover:shadow-md transition-shadow duration-300">
+      <span class="text-xs raleway text-gray-400 font-bold uppercase tracking-wider mb-1">
+        {{ 'BUSINESS_DASHBOARD.TODAY' | translate }}
+      </span>
+        <div class="flex items-baseline gap-1">
+        <span class="text-xl raleway sm:text-2xl font-extrabold text-gray-800">
+          {{ (store.businessSummary()?.todayEarnings || 0) | currency }}
+        </span>
         </div>
       </div>
+
+      <div class="bg-[#64bdb8]/10 rounded-2xl p-4 border border-gray-100 flex flex-col justify-center hover:shadow-md transition-shadow duration-300">
+      <span class="text-xs raleway text-gray-400 font-bold uppercase tracking-wider mb-1">
+        {{ 'BUSINESS_DASHBOARD.MONTH' | translate }}
+      </span>
+        <div class="flex items-baseline gap-1">
+        <span class="text-xl raleway sm:text-2xl font-extrabold text-gray-800">
+          {{ (store.businessSummary()?.monthEarnings || 0) | currency }}
+        </span>
+        </div>
+      </div>
+
+      <div class="bg-[#ffc800]/10 rounded-2xl p-4 border border-[#ffc800]/20 flex flex-col justify-center hover:shadow-md transition-shadow duration-300">
+      <span class="text-xs raleway text-[#dcb000] font-bold uppercase tracking-wider mb-1">
+        {{ 'BUSINESS_DASHBOARD.TOTAL_EARNINGS' | translate }}
+      </span>
+        <div class="flex items-baseline gap-1">
+        <span class="text-xl raleway sm:text-2xl font-extrabold text-gray-900">
+          {{ (store.businessSummary()?.totalEarnings || 0) | currency }}
+        </span>
+        </div>
+      </div>
+
+      <div class="bg-[#64bdb8]/10 rounded-2xl p-4 border border-gray-100 flex flex-col justify-center hover:shadow-md transition-shadow duration-300">
+      <span class="text-xs raleway text-gray-400 font-bold uppercase tracking-wider mb-1">
+        {{ 'BUSINESS_DASHBOARD.TRANSACTIONS' | translate }}
+      </span>
+        <div class="flex items-baseline gap-1">
+        <span class="text-xl raleway sm:text-2xl font-extrabold text-gray-800">
+          {{ store.businessSummary()?.transactionsCount || 0 }}
+        </span>
+          <span class="text-xs text-gray-400 font-medium">
+        </span>
+        </div>
+      </div>
+
     </div>
 
   </div>

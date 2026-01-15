@@ -37,3 +37,13 @@ export interface User{
   role: string;
   exp: number;
 }
+
+export interface ForgotPasswordRequest{
+  email: string;
+}
+
+export interface ResetPasswordRequest{
+  email: string;
+  token: string;
+  newPassword: string;
+}

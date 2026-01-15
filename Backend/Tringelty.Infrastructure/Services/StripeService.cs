@@ -68,11 +68,13 @@ public class StripeService : IStripeService
     
     public async Task<string> CreateCheckoutSessionAsync(string connectedAccountId, decimal amount, string currency, Worker worker)
     {
-        // Stripe работает в "копейках" (центах). 5.00 EUR = 500 cents.
-        var amountInCents = (long)(amount * 100);
+        var feePercent = _configuration.GetValue<decimal>("StripeSettings:PlatformFeePercent", 10m);
     
-        // Наша комиссия (например, 10%)
-        var applicationFee = (long)(amountInCents * 0.1m); 
+        var feeMultiplier = feePercent / 100m;
+        
+        var amountInCents = (long)(amount * 100);
+        
+        var applicationFee = (long)(amountInCents * feeMultiplier);
         var frontendUrl = _configuration["AppSettings:FrontendUrl"];
         var options = new SessionCreateOptions
         {
@@ -105,7 +107,8 @@ public class StripeService : IStripeService
                 Metadata = new Dictionary<string, string>
                 {
                     { "WorkerId", worker.Id.ToString() }, // Наш GUID
-                    { "PlatformFee", applicationFee.ToString() } // Наша комиссия в копейках
+                    { "PlatformFee", applicationFee.ToString() }, // Наша комиссия в копейках
+                    { "FeePercent", feePercent.ToString() }
                 }
             },
             SuccessUrl = $"{frontendUrl}/payment/success",

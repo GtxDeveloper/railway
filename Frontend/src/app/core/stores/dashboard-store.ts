@@ -40,6 +40,7 @@ export class DashboardStore {
   readonly isWorkerQrLoading = signal<string | null>(null);
   // Финансы
   readonly summary = signal<Summary>({transactionsCount: 0, todayEarnings: 0, monthEarnings: 0, totalEarnings: 0});
+  readonly businessSummary = signal<Summary>({transactionsCount: 0, todayEarnings: 0, monthEarnings: 0, totalEarnings: 0});
   readonly balance = signal<Balance>({currency: 'eur', available: 0, pending: 0});
   readonly transactions = signal<Transaction[]>([]);
 
@@ -91,7 +92,10 @@ export class DashboardStore {
           return forkJoin({
             profile: this.api.profile(),
             workers: this.api.workers(),
-            summary: this.api.getSummary(),
+            summary: context.workerId
+              ? this.api.getWorkerSummary(context.workerId)
+              : of({ transactionsCount: 0, todayEarnings: 0, monthEarnings: 0, totalEarnings: 0 }),
+            businessSummary : this.api.getSummary(),
             business: this.api.getBusiness(),
             currentWorker: meRequest
           });
@@ -112,6 +116,7 @@ export class DashboardStore {
             summary: summaryRequest,
 
             business: of(null),
+            businessSummary: of(null),
             currentWorker: meRequest
           });
         }
@@ -126,6 +131,7 @@ export class DashboardStore {
 
         if (data.summary) this.summary.set(data.summary);
         if (data.business) this.business.set(data.business);
+        if (data.businessSummary) this.businessSummary.set(data.businessSummary);
 
         this.isLoading.set(false);
 

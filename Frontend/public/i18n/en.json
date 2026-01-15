@@ -197,7 +197,11 @@
     "TOOLTIP_DELETE": "Delete",
     "DELETE_MODAL_TITLE": "Delete Employee?",
     "DELETE_MODAL_MESSAGE": "Are you sure you want to delete this employee? This action cannot be undone.",
-    "DELETE_CONFIRM": "Delete"
+    "DELETE_CONFIRM": "Delete",
+    "TODAY": "Today",
+    "MONTH": "This Month",
+    "TOTAL_EARNINGS": "Total Earnings",
+    "TRANSACTIONS": "Transactions"
   },
   "ADMIN_DASHBOARD": {
     "TITLE": "Admin Dashboard",
@@ -227,5 +231,19 @@
     "TITLE": "Oops! Page not found",
     "MESSAGE": "It looks like you're lost. The page you are looking for doesn't exist or has been moved.",
     "BUTTON": "Back to Home"
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "Forgot Password?",
+    "SUBTITLE": "Enter your email and we'll send you a link to reset your password.",
+    "SUBMIT_BUTTON": "Send Reset Link",
+    "SUCCESS_MESSAGE": "Check your email! We sent you a link to reset your password.",
+    "BACK_TO_LOGIN": "Back to Login"
+  },
+  "RESET_PASSWORD": {
+    "TITLE": "Reset Password",
+    "SUBTITLE": "Enter your new password below.",
+    "NEW_PASSWORD_PLACEHOLDER": "New Password",
+    "SUBMIT_BUTTON": "Set New Password",
+    "INVALID_LINK": "Invalid or expired password reset link."
   }
 }

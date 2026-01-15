@@ -197,7 +197,11 @@
     "TOOLTIP_DELETE": "Odstrániť",
     "DELETE_MODAL_TITLE": "Odstrániť zamestnanca?",
     "DELETE_MODAL_MESSAGE": "Naozaj chcete odstrániť tohto zamestnanca? Táto akcia je nevratná.",
-    "DELETE_CONFIRM": "Odstrániť"
+    "DELETE_CONFIRM": "Odstrániť",
+    "TODAY": "Dnes",
+    "MONTH": "Tento mesiac",
+    "TOTAL_EARNINGS": "Celkový zárobok",
+    "TRANSACTIONS": "Transakcie"
   },
   "ADMIN_DASHBOARD": {
     "TITLE": "Administračný panel",
@@ -227,5 +231,19 @@
     "TITLE": "Ups! Stránka sa nenašla",
     "MESSAGE": "Vyzerá to tak, že ste sa stratili. Stránka, ktorú hľadáte, neexistuje alebo bola presunutá.",
     "BUTTON": "Späť domov"
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "Zabudnuté heslo?",
+    "SUBTITLE": "Zadajte svoj e-mail a pošleme vám odkaz na obnovenie hesla.",
+    "SUBMIT_BUTTON": "Odoslať odkaz",
+    "SUCCESS_MESSAGE": "Skontrolujte si e-mail! Poslali sme vám odkaz na obnovenie hesla.",
+    "BACK_TO_LOGIN": "Späť na prihlásenie"
+  },
+  "RESET_PASSWORD": {
+    "TITLE": "Obnovenie hesla",
+    "SUBTITLE": "Zadajte svoje nové heslo nižšie.",
+    "NEW_PASSWORD_PLACEHOLDER": "Nové heslo",
+    "SUBMIT_BUTTON": "Nastaviť nové heslo",
+    "INVALID_LINK": "Neplatný alebo expirovaný odkaz."
   }
 }

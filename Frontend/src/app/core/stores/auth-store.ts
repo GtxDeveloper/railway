@@ -10,7 +10,7 @@ import {
   RegisterRequest,
   User,
   VerifyRequest,
-  RefreshRequest
+  RefreshRequest, ForgotPasswordRequest, ResetPasswordRequest
 } from '../models/auth.models';
 import { MessageResponse } from '../models/message.model';
 
@@ -168,6 +168,22 @@ export class AuthStore implements OnDestroy {
       console.error('Invalid token format', error);
       this.clearSession(true);
     }
+  }
+
+  // 6. Запрос сброса пароля (Forgot Password)
+  // Обычно это просто отправка письма, поэтому состояние пользователя не меняем
+  forgotPassword(request: ForgotPasswordRequest): Observable<MessageResponse> {
+    return this.api.forgotPassword(request);
+  }
+
+  // 7. Установка нового пароля (Reset Password)
+  resetPassword(request: ResetPasswordRequest): Observable<MessageResponse> {
+    return this.api.resetPassword(request).pipe(
+      tap(() => {
+        // После успешной смены пароля логично перенаправить пользователя на логин
+        this.router.navigate(['/login']);
+      })
+    );
   }
 
   ngOnDestroy(): void {

@@ -15,6 +15,8 @@ import {InvitePage} from './features/auth/invite-page/invite-page';
 import {AdminPageComponent} from './features/admin/admin-page';
 import {guestGuard} from './core/guards/guest.guard';
 import {NotFoundPage} from './features/not-found/not-found-page';
+import {ForgotPasswordPageComponent} from './features/auth/forgot-password-page/forgot-password-page';
+import {ResetPasswordPageComponent} from './features/auth/reset-password-page/reset-password-page';
 
 
 export const routes: Routes = [
@@ -45,6 +47,16 @@ export const routes: Routes = [
       {
         path: 'choose',
         component: ChoosePage,
+        canActivate: [guestGuard]
+      },
+      {
+        path: 'forgot-password',
+        component: ForgotPasswordPageComponent,
+        canActivate: [guestGuard]
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordPageComponent,
         canActivate: [guestGuard]
       },
       {

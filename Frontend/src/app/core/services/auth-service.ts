@@ -1,6 +1,13 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {AuthResponse, LoginRequest, RefreshRequest, RegisterRequest, VerifyRequest} from '../models/auth.models';
+import {
+  AuthResponse,
+  ForgotPasswordRequest,
+  LoginRequest,
+  RefreshRequest,
+  RegisterRequest, ResetPasswordRequest,
+  VerifyRequest
+} from '../models/auth.models';
 import {Observable} from 'rxjs';
 import {MessageResponse} from '../models/message.model';
 import {environment} from '../../../environments/environment';
@@ -31,5 +38,13 @@ export class AuthService {
 
   logout() : Observable<MessageResponse> {
     return this.http.post<MessageResponse>(`${this.apiUrl}Auth/logout`, {})
+  }
+
+  forgotPassword(request: ForgotPasswordRequest) : Observable<MessageResponse> {
+      return this.http.post<MessageResponse>(`${this.apiUrl}Auth/forgot-password`, request)
+  }
+
+  resetPassword(request : ResetPasswordRequest) : Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.apiUrl}Auth/reset-password`, request)
   }
 }

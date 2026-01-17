@@ -1,66 +1,57 @@
-﻿using MailKit.Net.Smtp; // <-- Библиотека MailKit
-using MailKit.Security;
-using Microsoft.Extensions.Configuration; // Или IOptions
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit; // <-- Создание письма
-using MimeKit.Text;
+using Resend;
 using Tringelty.Core.Interfaces;
-using Tringelty.Infrastructure.Options;
 
 namespace Tringelty.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {
     private readonly ILogger<EmailService> _logger;
-    private readonly EmailOptions _emailOptions;
+    private readonly IResend _resend;
+    
+    private readonly string _senderName;
+    private readonly string _senderEmail;
 
-    public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+    public EmailService(IConfiguration configuration, ILogger<EmailService> logger, IResend resend)
     {
         _logger = logger;
+        _resend = resend;
+
         
-        // Маппим настройки из JSON в объект
-        _emailOptions = configuration.GetSection("EmailSettings").Get<EmailOptions>() 
-                        ?? throw new Exception("EmailSettings not found in config");
+        _senderName = configuration["EmailSettings:SenderName"] ?? "Tringelty App";
+        _senderEmail = configuration["EmailSettings:SenderEmail"] ?? "noreply@tringelty.com";
     }
 
     public async Task SendEmailAsync(string to, string subject, string body)
     {
         try
         {
-            // 1. Создаем письмо
-            var email = new MimeMessage();
-            email.From.Add(new MailboxAddress(_emailOptions.SenderName, _emailOptions.SenderEmail));
-            email.To.Add(new MailboxAddress("", to));
-            email.Subject = subject;
-            
-            // Тело письма (HTML)
-            email.Body = new TextPart(TextFormat.Html) 
-            { 
-                Text = body 
-            };
+            var message = new EmailMessage();
 
-            // 2. Отправляем через SMTP
-            using var smtp = new SmtpClient();
+           
+            message.From = $"{_senderName} <{_senderEmail}>";
             
-            // Подключаемся (587 - стандартный порт для TLS)
-            await smtp.ConnectAsync(_emailOptions.SmtpServer, _emailOptions.Port, SecureSocketOptions.StartTls);
-            
-            // Авторизуемся
-            await smtp.AuthenticateAsync(_emailOptions.Username, _emailOptions.Password);
-            
-            // Шлем
-            await smtp.SendAsync(email);
-            
-            // Отключаемся
-            await smtp.DisconnectAsync(true);
+            message.To.Add(to);
+            message.Subject = subject;
+            message.HtmlBody = body;
 
-            _logger.LogInformation($"Письмо отправлено на {to}");
+            // Отправляем через API (это обычный HTTP запрос, Railway его пропустит)
+            var response = await _resend.EmailSendAsync(message);
+
+            if (response.Success)
+            {
+                _logger.LogInformation($" Письмо успешно отправлено на {to}. ID: {response.Content}");
+            }
+            else
+            {
+                
+                _logger.LogError($" Ошибка Resend при отправке на {to}");
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Ошибка отправки письма на {to}");
-            // Можно пробросить ошибку дальше, если хотим, чтобы юзер видел ошибку
-            // throw; 
+            _logger.LogError(ex, $" Критическая ошибка отправки письма на {to}");
         }
     }
 }

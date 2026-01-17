@@ -11,7 +11,7 @@ using Tringelty.Infrastructure.Services;
 using System.IdentityModel.Tokens.Jwt;
 using Tringelty.Api.Data;
 using Tringelty.Infrastructure;
-
+using Resend;
 var builder = WebApplication.CreateBuilder(args);
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -61,6 +61,14 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>( o =>
+{
+    o.ApiToken = builder.Configuration["Resend:ApiToken"]!;
+} );
+builder.Services.AddTransient<IResend, ResendClient>();
 
 // Database Context configuration
 // We use Npgsql provider for PostgreSQL. Connection string is loaded from appsettings.json.

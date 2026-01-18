@@ -82,10 +82,16 @@ export class UiInputComponent {
   get errorMessage(): string {
     if (this.control.hasError('required')) return 'Povinné pole';
     if (this.control.hasError('email')) return 'Neplatný formát emailu';
+
     if (this.control.hasError('minlength')) {
       const min = this.control.errors?.['minlength'].requiredLength;
       return `Minimálne ${min} znakov`;
     }
+
+    if (this.control.hasError('pattern')) {
+      return 'Heslo musí obsahovať veľké písmeno, číslo a znak';
+    }
+
     return '';
   }
 }

@@ -1,13 +1,15 @@
 import {Component, ElementRef, inject, OnInit, QueryList, signal, ViewChildren} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators, FormControl, FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {UiInputComponent} from '../../../shared/components/ui-input-component/ui-input-component';
 import {AuthStore} from '../../../core/stores/auth-store';
 import {RegisterRequest, VerifyRequest} from '../../../core/models/auth.models';
 import {passwordMatchValidator} from '../../../core/helpers/password-match-validator';
 import {TranslatePipe} from '@ngx-translate/core';
-import { HttpErrorResponse } from '@angular/common/http'; // Не забудь импортировать
+import {HttpErrorResponse} from '@angular/common/http'; // Не забудь импортировать
+
+const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
 
 @Component({
   selector: 'app-register',
@@ -15,6 +17,8 @@ import { HttpErrorResponse } from '@angular/common/http'; // Не забудь �
   imports: [CommonModule, ReactiveFormsModule, RouterLink, UiInputComponent, FormsModule, TranslatePipe],
   templateUrl: './register-page.html'
 })
+
+
 export class RegisterPage implements OnInit {
   private fb = inject(FormBuilder);
   private authStore = inject(AuthStore);
@@ -32,11 +36,15 @@ export class RegisterPage implements OnInit {
     surname: ['', [Validators.required]],
     brand: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    repeatPassword: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(passwordPattern)
+    ]],
+    repeatPassword: ['', [Validators.required, Validators.minLength(8)]],
     phone: [''],
     city: ['']
-  },{ validators: passwordMatchValidator });
+  }, {validators: passwordMatchValidator});
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -141,7 +149,7 @@ export class RegisterPage implements OnInit {
     // Сбрасываем ошибку перед проверкой, но можно оставить, если хочешь, чтобы старая висела пока не введут верно
     this.error.set(null);
 
-    const request : VerifyRequest = {
+    const request: VerifyRequest = {
       email: this.submittedEmail(),
       code: code,
     }

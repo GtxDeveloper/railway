@@ -1,0 +1,152 @@
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* Контейнер тоста */
+.toast-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Центрирование по вертикали и горизонтали */
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 12px; /* gap-3 */
+
+  background-color: #ffffff;
+  color: #111827; /* gray-900 */
+  border: 1px solid #f3f4f6; /* gray-100 */
+
+  padding: 16px 32px; /* py-4 px-8 */
+  border-radius: 16px; /* rounded-2xl */
+
+  /* Тень (shadow-2xl) */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Анимация */
+  animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Обертка иконки (зеленый круг) */
+.toast-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #dcfce7; /* green-100 */
+  padding: 6px;
+  border-radius: 50%;
+}
+
+/* Сама иконка */
+.toast-icon {
+  width: 20px;
+  height: 20px;
+  color: #16a34a; /* green-600 */
+}
+
+/* Текст */
+.toast-text {
+  font-family: 'Raleway', sans-serif; /* Убедись, что шрифт подключен */
+  font-weight: 700;
+  font-size: 1.125rem; /* text-lg */
+}
+
+/* Ключевые кадры анимации */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%); /* Чуть выше или ниже старта */
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+/* Контейнер тоста */
+.toast-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центрируем контент внутри, если он перенесется */
+  gap: 12px;
+
+  background-color: #ffffff;
+  color: #111827;
+  border: 1px solid #f3f4f6;
+
+  /* Стандартные отступы (Desktop) */
+  padding: 16px 32px;
+  border-radius: 16px;
+
+  /* ВАЖНО для мобильных: ограничиваем ширину, чтобы не упирался в края */
+  width: max-content; /* Ширина по контенту */
+  max-width: 90vw;    /* Но не шире 90% экрана */
+
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Обертка иконки */
+.toast-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dcfce7;
+  padding: 6px;
+  border-radius: 50%;
+
+  /* ВАЖНО: Запрещаем сжимать иконку, если текст длинный */
+  flex-shrink: 0;
+}
+
+/* Сама иконка */
+.toast-icon {
+  width: 20px;
+  height: 20px;
+  color: #16a34a;
+}
+
+/* Текст */
+.toast-text {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 1.125rem; /* 18px */
+
+  /* Если текст длинный, он будет переноситься, а не растягивать окно */
+  white-space: normal;
+  text-align: left;
+}
+
+/* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+@media (max-width: 640px) {
+  .toast-container {
+    padding: 12px 20px; /* Уменьшаем отступы */
+    gap: 10px;
+    width: 85vw; /* На мобилках занимаем 85% ширины */
+    border-radius: 12px;
+  }
+
+  .toast-text {
+    font-size: 0.95rem; /* Чуть уменьшаем шрифт (ок. 15px) */
+    line-height: 1.4;   /* Улучшаем читаемость при переносе строк */
+  }
+}
+
+/* Ключевые кадры анимации (без изменений) */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

@@ -266,19 +266,6 @@ export class DashboardStore {
       tap(() => {
         // 1. Обновляем профиль
         this.profile.update(current => current ? { ...current, ...payload } : current);
-
-        // 2. СИНХРОНИЗАЦИЯ: Обновляем данные Воркера
-        const currentWorker = this.currentWorker(); // Берем вычисленного воркера
-
-        if (currentWorker) {
-          const workerPayload = {
-            firstName: payload.firstName,
-            lastName: payload.lastName,
-            job: currentWorker.job // Оставляем старую должность
-          };
-          // Обновляем себя же в списке
-          this.updateWorker(currentWorker.id, workerPayload).subscribe();
-        }
       })
     );
   }
@@ -418,33 +405,6 @@ export class DashboardStore {
     );
   }
 
-  changeJob(workerId: string, newJob: string) {
-    // Тут важный момент:
-    // Если мы Owner и меняем кого-то из списка - мы ищем в this.workers()
-    // Если мы Worker и меняем себя (теоретически) - мы можем взять из this.currentWorker()
-
-    let worker = this.workers().find(w => w.id === workerId);
-
-    // Если в списке не нашли (например, мы Worker и список пуст), берем из currentWorker
-    if (!worker && this.currentWorker()?.id === workerId) {
-      worker = this.currentWorker()!;
-    }
-
-    if (!worker) return of(null);
-
-    const nameParts = worker.name.split(' ');
-    const fName = nameParts[0] || '';
-    const lName = nameParts.slice(1).join(' ') || '';
-
-    const payload: UpdateWorkerPayload = {
-      firstName: fName,
-      lastName: lName,
-      job: newJob
-    };
-
-    return this.updateWorker(workerId, payload);
-  }
-
   // Метод принимает ID и возвращает ссылку на картинку (blob url)
   getWorkerQr(workerId: string) {
     this.isWorkerQrLoading.set(workerId);
@@ -461,21 +421,6 @@ export class DashboardStore {
         return throwError(() => err);
       })
     );
-  }
-
-  pay(workerId: string, amount: number) {
-    this.isPaying.set(true);
-    this.api.pay(workerId, amount).subscribe({
-      next: (res: any) => {
-        if (res.url) window.location.href = res.url;
-        else this.isPaying.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.isPaying.set(false);
-        alert('Chyba pri vytváraní platby');
-      }
-    });
   }
 
   changePassword(data: {oldPassword: string, newPassword: string}) {

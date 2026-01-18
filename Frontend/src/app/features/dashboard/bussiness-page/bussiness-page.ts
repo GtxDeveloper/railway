@@ -12,15 +12,18 @@ import {TranslatePipe} from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './bussiness-page.html',
-  styles: [`
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  `]
+  styleUrl: './bussiness-page.css'
 })
 export class BusinessDashboardComponent implements OnInit {
 
   // Внедряем Стор
   readonly store = inject(DashboardStore);
+
+  showToast = signal(false);
+  toastMessage = signal(''); // Текст сообщения
+  toastType = signal<'success' | 'error'>('success'); // Тип сообщения
+  private toastTimeout: any;
+
 
   isEditModalOpen = signal(false);
   isAddModalOpen = signal(false);
@@ -86,7 +89,7 @@ export class BusinessDashboardComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.loadingQrForWorkerId.set(null);
-        alert('Nepodarilo sa načítať QR kód');
+        this.triggerToast('Nepodarilo sa načítať QR kód', 'error');
       }
     });
   }
@@ -112,7 +115,7 @@ export class BusinessDashboardComponent implements OnInit {
 
   copyToClipboard(text: string) {
     navigator.clipboard.writeText(text).then(() => {
-      alert('Odkaz skopírovaný!');
+      this.triggerToast('Odkaz skopírovaný!');
     });
   }
 
@@ -132,8 +135,9 @@ export class BusinessDashboardComponent implements OnInit {
 
   // СОХРАНИТЬ НОВОГО
   saveNewWorker() {
+    // 1. Валидация (Красный тост)
     if (!this.addFirstName() || !this.addJob()) {
-      alert('Meno a pozícia sú povinné'); // Валидация
+      this.triggerToast('Meno a pozícia sú povinné', 'error');
       return;
     }
 
@@ -149,12 +153,16 @@ export class BusinessDashboardComponent implements OnInit {
       next: () => {
         this.isAddSaving.set(false);
         this.closeAddModal();
-        // Уведомление об успехе
+
+        // 2. Успех (Зеленый тост)
+        this.triggerToast('Pracovník úspešne pridaný', 'success');
       },
       error: (err) => {
         this.isAddSaving.set(false);
         console.error(err);
-        alert('Chyba pri vytváraní pracovníka');
+
+        // 3. Ошибка сервера (Красный тост)
+        this.triggerToast('Chyba pri vytváraní pracovníka', 'error');
       }
     });
   }
@@ -190,8 +198,9 @@ export class BusinessDashboardComponent implements OnInit {
     const id = this.editingWorkerId();
     if (!id) return;
 
+    // 1. Валидация (Красный тост)
     if (!this.editFirstName() || !this.editJob()) {
-      alert('Meno a pozícia sú povinné');
+      this.triggerToast('Meno a pozícia sú povinné', 'error');
       return;
     }
 
@@ -207,12 +216,16 @@ export class BusinessDashboardComponent implements OnInit {
       next: () => {
         this.isEditSaving.set(false);
         this.closeEditModal();
-        // Можно добавить тост/уведомление "Успешно"
+
+        // 2. Успех (Зеленый тост)
+        this.triggerToast('Zmeny boli uložené', 'success');
       },
       error: (err) => {
         this.isEditSaving.set(false);
         console.error(err);
-        alert('Chyba pri ukladaní');
+
+        // 3. Ошибка (Красный тост)
+        this.triggerToast('Chyba pri ukladaní', 'error');
       }
     });
   }
@@ -221,7 +234,7 @@ export class BusinessDashboardComponent implements OnInit {
   saveBusiness() {
     // Валидация
     if (!this.formBrandName() || !this.formCity()) {
-      alert('Názov prevádzky a mesto sú povinné údaje.');
+      this.triggerToast('Názov prevádzky a mesto sú povinné údaje.', 'error');
       return;
     }
 
@@ -251,13 +264,14 @@ export class BusinessDashboardComponent implements OnInit {
     forkJoin(tasks).subscribe({
       next: () => {
         this.isSaving.set(false);
-        alert('Údaje boli úspešne uložené');
-        // this.store.loadAll(); // Можно не вызывать, так как мы обновили стейт в tap()
+        this.triggerToast('Údaje boli úspešne uložené', 'success');
+
+        // this.store.loadAll();
       },
       error: (err) => {
         this.isSaving.set(false);
         console.error(err);
-        alert('Chyba pri ukladaní');
+        this.triggerToast('Chyba pri ukladaní', 'error');
       }
     });
   }
@@ -270,23 +284,23 @@ export class BusinessDashboardComponent implements OnInit {
 
       // Валидация размера (2MB)
       if (file.size > 2 * 1024 * 1024) {
-        alert('Súbor je príliš veľký (max 2MB)');
+        this.triggerToast('Súbor je príliš veľký (max 2MB)', 'error');
         return;
       }
 
       this.store.uploadBusinessLogo(file);
-      input.value = ''; // Сброс, чтобы можно было загрузить тот же файл
+      input.value = ''; // Сброс
     }
   }
 
-  // 2. Выбор аватара работника
+// 2. Выбор аватара работника
   onWorkerAvatarSelected(event: Event, workerId: string) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       const file = input.files[0];
 
       if (file.size > 2 * 1024 * 1024) {
-        alert('Súbor je príliš veľký (max 2MB)');
+        this.triggerToast('Súbor je príliš veľký (max 2MB)', 'error');
         return;
       }
 
@@ -308,12 +322,20 @@ export class BusinessDashboardComponent implements OnInit {
       next: (res) => {
         // Копируем в буфер обмена
         navigator.clipboard.writeText(res.inviteUrl).then(() => {
-          alert(`Odkaz skopírovaný:\n${res.inviteUrl}`);
+
+
+          this.triggerToast('Pozývací odkaz bol skopírovaný', 'success');
+
+        }).catch(err => {
+          console.error('Clipboard error', err);
+          // Если вдруг браузер запретил копирование
+          this.triggerToast('Nepodarilo sa skopírovať odkaz', 'error');
         });
       },
       error: (err) => {
         console.error(err);
-        alert('Chyba pri generovaní odkazu');
+
+        this.triggerToast('Chyba pri generovaní odkazu', 'error');
       }
     });
   }
@@ -335,5 +357,17 @@ export class BusinessDashboardComponent implements OnInit {
       this.store.deleteWorker(id);
       this.closeDeleteModal();
     }
+  }
+
+  private triggerToast(message: string, type: 'success' | 'error' = 'success') {
+    this.toastMessage.set(message);
+    this.toastType.set(type);
+    this.showToast.set(true);
+
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+
+    this.toastTimeout = setTimeout(() => {
+      this.showToast.set(false);
+    }, 3000);
   }
 }

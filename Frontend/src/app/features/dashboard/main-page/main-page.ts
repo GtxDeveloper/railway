@@ -29,6 +29,8 @@ export class MainPage implements OnInit {
 
   readonly store = inject(DashboardStore);
   showToast = signal(false);
+  toastMessage = signal(''); // Текст сообщения
+  toastType = signal<'success' | 'error'>('success'); // Тип сообщения
   private toastTimeout: any;
   isSaving = signal<boolean>(false);
   isBalanceOpen = signal(false);
@@ -115,7 +117,7 @@ export class MainPage implements OnInit {
 
   saveProfile() {
     if (this.firstNameControl.invalid || this.lastNameControl.invalid || this.roleControl.invalid) {
-      alert('Заполните обязательные поля');
+      this.triggerToast('Vyplňte, prosím, požadované polia', 'error');
       return;
     }
 
@@ -134,29 +136,27 @@ export class MainPage implements OnInit {
       firstName: this.firstNameControl.value,
       lastName: this.lastNameControl.value,
       phoneNumber: this.phoneControl.value,
+      job: this.roleControl.value
     };
 
     const job = this.roleControl.value;
-    const worker = this.store.currentWorker();
 
     // 2. Задачи
     const tasks = [
       this.store.changeProfile(payload)
     ];
 
-    if (worker?.id) {
-      tasks.push(this.store.changeJob(worker.id, job));
-    }
-
     // 3. Выполнение
     forkJoin(tasks).subscribe({
       next: () => {
         this.isSaving.set(false);
-        alert('Profil uložený');
+        this.triggerToast('Profil uložený', 'success');
+        this.store.currentWorker()!.job = job;
       },
       error: (err) => {
         this.isSaving.set(false);
         console.error(err);
+        this.triggerToast('Chyba pri ukladaní', 'error');
       }
     });
   }
@@ -164,8 +164,8 @@ export class MainPage implements OnInit {
   onChangePassword(data: { oldPassword: string, newPassword: string }) {
     console.log('Отправка на бэк:', data);
     this.store.changePassword(data).subscribe({
-      next: () => alert('Heslo bolo úspešne zmenené'),
-      error: (err) => alert('Chyba: ' + err.message)
+      next: () => this.triggerToast('Heslo bolo úspešne zmenené', 'success'),
+      error: (err) => this.triggerToast('Chyba: ' + err.message, 'error')
     });
   }
 
@@ -173,18 +173,18 @@ export class MainPage implements OnInit {
     this.store.onInitEmail(event)
       .subscribe({
         next: () => event.onSuccess(),
-        error: (err) => alert('Chyba: ' + err.message)
+        error: (err) => this.triggerToast('Chyba: ' + err.message, 'error')
       });
   }
 
   onConfirmEmail(event: { newEmail: string, code: string }) {
     this.store.onConfirmEmail(event).subscribe({
       next: () => {
-        alert('Email úspešne zmenený!');
+        this.triggerToast('Email úspešne zmenený!', 'success');
         this.store.loadAll();
         this.emailField.cancel();
       },
-      error: (err) => alert('Nesprávny kód!')
+      error: (err) => this.triggerToast('Nesprávny kód!', 'error')
     });
   }
 
@@ -196,7 +196,7 @@ export class MainPage implements OnInit {
 
       // Простая валидация (например, макс 5 МБ)
       if (file.size > 5 * 1024 * 1024) {
-        alert('Súbor je príliš veľký (max 5MB)');
+        this.triggerToast('Súbor je príliš veľký (max 5MB)', 'error');
         return;
       }
 
@@ -221,20 +221,24 @@ export class MainPage implements OnInit {
     if (!link) return;
 
     navigator.clipboard.writeText(link).then(() => {
-
-      // 1. Показываем тост
-      this.showToast.set(true);
-
-      // 2. Очищаем предыдущий таймер, если нажали второй раз быстро
-      if (this.toastTimeout) clearTimeout(this.toastTimeout);
-
-      // 3. Скрываем через 3 секунды
-      this.toastTimeout = setTimeout(() => {
-        this.showToast.set(false);
-      }, 3000);
-
+      // Если у тебя есть translate service, можешь использовать this.translate.instant('KEY')
+      // Или просто хардкод для теста:
+      this.triggerToast('Odkaz skopírovaný', 'success');
     }).catch(err => {
       console.error('Failed to copy: ', err);
+      this.triggerToast('Nepodarilo sa skopírovať odkaz', 'error');
     });
+  }
+
+  private triggerToast(message: string, type: 'success' | 'error' = 'success') {
+    this.toastMessage.set(message);
+    this.toastType.set(type);
+    this.showToast.set(true);
+
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+
+    this.toastTimeout = setTimeout(() => {
+      this.showToast.set(false);
+    }, 3000);
   }
 }

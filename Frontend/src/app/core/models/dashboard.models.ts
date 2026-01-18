@@ -50,6 +50,7 @@ export interface UserProfilePayload {
   phoneNumber: string;
   city?: string;      // Опционально, если редактируем только личные данные
   brandName?: string; // Опционально, если редактируем только личные данные
+  job?: string;
 }
 
 export interface BusinessProfile {

@@ -11,14 +11,18 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class PasswordChangeField {
   private fb = inject(FormBuilder);
-
+  private readonly passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
   // Событие, которое полетит в родителя для запроса на бэк
   @Output() save = new EventEmitter<{oldPassword: string, newPassword: string}>();
 
   // Локальная форма
   form = this.fb.group({
     oldPassword: ['', Validators.required],
-    newPassword: ['', [Validators.required, Validators.minLength(8)]]
+    newPassword: ['', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(this.passwordPattern) // <-- Добавил валидатор
+    ]]
   });
 
   // Состояние модалки
@@ -48,7 +52,18 @@ export class PasswordChangeField {
     if (!control) return '';
 
     if (control.hasError('required')) return 'Pole je povinné';
-    if (control.hasError('minlength')) return 'Heslo musí mať aspoň 6 znakov';
+
+    // Обновил текст для длины (динамически берет число 8)
+    if (control.hasError('minlength')) {
+      const min = control.errors?.['minlength'].requiredLength;
+      return `Minimálne ${min} znakov`;
+    }
+
+    // Добавил сообщение для сложности пароля
+    if (control.hasError('pattern')) {
+      return 'Heslo musí obsahovať veľké písmeno, číslo a znak';
+    }
+
     return '';
   }
 

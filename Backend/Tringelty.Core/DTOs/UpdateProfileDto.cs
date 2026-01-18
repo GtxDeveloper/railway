@@ -17,4 +17,6 @@ public class UpdateProfileDto
     
     // Если пустое - не меняем бренд
     public string? BrandName { get; set; }
+    
+    public string? Job { get; set; }
 }

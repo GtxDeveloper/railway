@@ -74,6 +74,18 @@ public class AccountService : IAccountService
                 await _businessRepository.SaveChangesAsync();
             }
         }
+
+        if (!string.IsNullOrWhiteSpace(request.Job))
+        {
+            var linkedWorker = await _businessRepository.GetWorkerByLinkedUserIdAsync(userId);
+            if (linkedWorker == null) throw new KeyNotFoundException("Worker not found");
+            
+            linkedWorker.Job = request.Job;
+            linkedWorker.Name = request.FirstName + " " + request.LastName;
+            
+            _businessRepository.UpdateWorker(linkedWorker);
+            await _businessRepository.SaveChangesAsync();
+        }
     }
 
     public async Task<string> UploadAvatarAsync(string userId, Stream fileStream, string fileName)

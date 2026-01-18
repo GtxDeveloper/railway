@@ -24,27 +24,52 @@ public class WebhooksController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Index()
     {
-        var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-
-        try
+        var json = "";
+        
+        try 
         {
-            // 1. Проверяем подпись (Security Layer)
-            // Это должно остаться в контроллере, так как зависит от HTTP заголовков
+            // 1. ВАЖНО: Разрешаем буферизацию и перематываем поток в начало
+            HttpContext.Request.EnableBuffering();
+            HttpContext.Request.Body.Position = 0;
+
+            // 2. Читаем тело
+            using (var reader = new StreamReader(HttpContext.Request.Body))
+            {
+                json = await reader.ReadToEndAsync();
+            }
+
+            // Лог для отладки (увидишь в Railway logs)
+            _logger.LogInformation($"Webhook received. Length: {json.Length}");
+
+            if (string.IsNullOrEmpty(json))
+            {
+                _logger.LogError("Webhook body is empty!");
+                return BadRequest("Empty body");
+            }
+
+            // 3. Проверяем подпись
             var stripeEvent = EventUtility.ConstructEvent(
                 json,
                 Request.Headers["Stripe-Signature"],
                 _whSecret
             );
 
-            // 2. Делегируем логику Сервису
+            // 4. Делегируем логику
             await _webhookService.HandleEventAsync(stripeEvent);
 
             return Ok();
         }
         catch (StripeException e)
         {
+            // Это ошибка подписи или формата Stripe
             _logger.LogError(e, "Stripe Webhook Error");
             return BadRequest();
+        }
+        catch (Exception e)
+        {
+            // Это любая другая ошибка (например, в сервисе)
+            _logger.LogError(e, "General Webhook Error");
+            return StatusCode(500);
         }
     }
 }

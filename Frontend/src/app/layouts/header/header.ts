@@ -1,9 +1,10 @@
-import {Component, inject, signal} from '@angular/core';
-import {RouterLink} from "@angular/router";
-import {AuthStore} from "../../core/stores/auth-store";
-import {DashboardStore} from '../../core/stores/dashboard-store';
-import {Locale, SettingsService} from '../../core/services/settings-service';
-import {TranslatePipe} from '@ngx-translate/core';
+import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from "@angular/router";
+import { AuthStore } from "../../core/stores/auth-store";
+import { UserDashboardStore } from '../../core/stores/user-dashboard.store';
+import { BusinessDashboardStore } from '../../core/stores/business-dashboard.store';
+import { Locale, SettingsService } from '../../core/services/settings-service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -17,8 +18,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class Header {
 
-   store = inject(AuthStore);
-   dashboardStore = inject(DashboardStore);
+  store = inject(AuthStore);
+  userDashboardStore = inject(UserDashboardStore);
+  businessDashboardStore = inject(BusinessDashboardStore);
   settings = inject(SettingsService);
 
   // Сигнал для открытия/закрытия мобильного меню

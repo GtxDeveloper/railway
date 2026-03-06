@@ -30,7 +30,11 @@ public interface IBusinessRepository
     
     Task<Worker?> GetWorkerByLinkedUserIdAsync(string linkedUserId);
     
+    Task<Worker?> GetWorkerByLinkedUserIdAsNoTrackingAsync(string linkedUserId);
+    
     Task<List<Business>> GetAllWithDetailsAsync();
     
     Task DeleteWorkerAsync(Worker worker);
+
+    Task<List<Worker>> GetWorkersByOwnerIdAsync(Guid ownerId);
 }

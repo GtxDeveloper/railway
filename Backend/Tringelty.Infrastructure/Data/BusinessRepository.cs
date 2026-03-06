@@ -129,6 +129,14 @@ public class BusinessRepository : IBusinessRepository
             .FirstOrDefaultAsync(w => w.LinkedUserId == linkedUserId);
     }
     
+    public async Task<Worker?> GetWorkerByLinkedUserIdAsNoTrackingAsync(string linkedUserId)
+    {
+        return await _context.Workers
+            .Include(w => w.Business)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(w => w.LinkedUserId == linkedUserId);
+    }
+    
     public async Task<List<Business>> GetAllWithDetailsAsync()
     {
         // Используем Query Syntax (синтаксис запросов), так как он удобнее для JOIN
@@ -172,5 +180,13 @@ public class BusinessRepository : IBusinessRepository
         
         // 2. Асинхронно сохраняем изменения в БД
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<List<Worker>> GetWorkersByOwnerIdAsync(Guid ownerId)
+    {
+        return await _context.Workers
+            .AsNoTracking()
+            .Where(w => w.Business != null && w.Business.OwnerId == ownerId)
+            .ToListAsync();
     }
 }

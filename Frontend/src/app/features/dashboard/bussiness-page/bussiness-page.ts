@@ -2,9 +2,10 @@ import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-import {DashboardStore} from '../../../core/stores/dashboard-store';
-import {UpdateWorkerPayload, UserProfilePayload} from '../../../core/models/dashboard.models';
-import {TranslatePipe} from '@ngx-translate/core';
+import { BusinessDashboardStore } from '../../../core/stores/business-dashboard.store';
+import { UserDashboardStore } from '../../../core/stores/user-dashboard.store';
+import { UpdateWorkerPayload, UserProfilePayload } from '../../../core/models/dashboard.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
@@ -16,8 +17,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class BusinessDashboardComponent implements OnInit {
 
-  // Внедряем Стор
-  readonly store = inject(DashboardStore);
+  // Внедряем Сторы
+  readonly store = inject(BusinessDashboardStore);
+  readonly userStore = inject(UserDashboardStore);
 
   showToast = signal(false);
   toastMessage = signal(''); // Текст сообщения
@@ -50,9 +52,8 @@ export class BusinessDashboardComponent implements OnInit {
   addJob = signal('');
 
   constructor() {
-    // ЭФФЕКТ: Синхронизируем данные из Стора в Инпуты при загрузке
     effect(() => {
-      const profile = this.store.profile();
+      const profile = this.userStore.profile();
       if (profile) {
         // untracked не обязателен, если мы просто сетим, но хорошая практика внутри эффекта
         this.formBrandName.set(profile.brandName || '');
@@ -73,7 +74,7 @@ export class BusinessDashboardComponent implements OnInit {
     // Запрашиваем и QR, и Ссылку параллельно
     forkJoin({
       qrUrl: this.store.getWorkerQr(worker.id),
-      payLinkObj: this.store.getPayLink(worker.id)
+      payLinkObj: this.userStore.getPayLink(worker.id)
     }).subscribe({
       next: ({ qrUrl, payLinkObj }) => {
 
@@ -241,7 +242,7 @@ export class BusinessDashboardComponent implements OnInit {
     this.isSaving.set(true);
 
     // 1. Берем текущий профиль, чтобы не потерять Имя и Фамилию
-    const currentProfile = this.store.profile();
+    const currentProfile = this.userStore.profile();
 
     if (!currentProfile) return; // Защита
 
@@ -258,7 +259,7 @@ export class BusinessDashboardComponent implements OnInit {
 
     // 3. Отправляем
     const tasks = [
-      this.store.changeProfile(payload)
+      this.userStore.changeProfile(payload)
     ];
 
     forkJoin(tasks).subscribe({
@@ -293,7 +294,7 @@ export class BusinessDashboardComponent implements OnInit {
     }
   }
 
-// 2. Выбор аватара работника
+  // 2. Выбор аватара работника
   onWorkerAvatarSelected(event: Event, workerId: string) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {

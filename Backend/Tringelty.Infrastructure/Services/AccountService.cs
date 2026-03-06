@@ -331,34 +331,40 @@ public class AccountService : IAccountService
     
     public async Task<UserContextDto> GetUserContextAsync(string userId)
     {
-        // 1. Проверяем, владелец ли это (есть ли у него бизнес)
-        var business = await _businessRepository.GetBusinessByOwnerIdAsync(Guid.Parse(userId));
-        if (business != null)
-        {
-            var workerOwner = await _businessRepository.GetWorkerByLinkedUserIdAsync(userId);
-            return new UserContextDto 
-            { 
-                UserId = Guid.Parse(userId), 
-                Role = "Owner", 
-                BusinessId = business.Id,
-                WorkerId = workerOwner.Id,
-            };
-        }
+        // 1 SINGLE QUERY: 
+        // This query fetches the Worker and its associated Business (thanks to .Include(w => w.Business) in the repo).
+        // Since every Owner is also a Worker in their own business, this works for both Owners and Workers.
+        var worker = await _businessRepository.GetWorkerByLinkedUserIdAsNoTrackingAsync(userId);
 
-        // 2. Проверяем, прилинкованный ли это работник
-        var worker = await _businessRepository.GetWorkerByLinkedUserIdAsync(userId);
         if (worker != null)
         {
-            return new UserContextDto 
-            { 
-                UserId = Guid.Parse(userId), 
-                Role = "Worker", 
-                WorkerId = worker.Id,
-                BusinessId = worker.BusinessId // Ему нужно знать ID бизнеса, чтобы грузить стили
-            };
+            // If they are an Owner, either their Job Title is "Owner", or they own the business they belong to.
+            bool isOwner = worker.Business != null && worker.Business.OwnerId == Guid.Parse(userId);
+
+            if (isOwner)
+            {
+                return new UserContextDto 
+                { 
+                    UserId = Guid.Parse(userId), 
+                    Role = "Owner", 
+                    BusinessId = worker.BusinessId,
+                    WorkerId = worker.Id,
+                };
+            }
+            else
+            {
+                // Regular worker
+                return new UserContextDto 
+                { 
+                    UserId = Guid.Parse(userId), 
+                    Role = "Worker", 
+                    WorkerId = worker.Id,
+                    BusinessId = worker.BusinessId // Ему нужно знать ID бизнеса, чтобы грузить стили
+                };
+            }
         }
 
-        // 3. Просто новый юзер без ролей
+        // 3. Просто новый юзер без ролей (не привязан ни как воркер, ни как владелец)
         return new UserContextDto { Role = "New" };
     }
 }

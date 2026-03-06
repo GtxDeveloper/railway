@@ -1,13 +1,13 @@
-import {Component, computed, effect, inject, OnInit, signal, ViewChild} from '@angular/core';
-import {DashboardStore} from '../../../core/stores/dashboard-store';
-import {ProfileEditFieldComponent} from '../../../shared/components/profile-edit-field/profile-edit-field';
-import {FormControl, Validators} from '@angular/forms';
-import {PasswordChangeField} from '../../../shared/components/password-change-field/password-change-field';
-import {EmailChangeField} from '../../../shared/components/email-change-field/email-change-field';
-import {forkJoin} from 'rxjs';
-import {DatePipe, DecimalPipe} from '@angular/common';
-import {UserProfilePayload} from '../../../core/models/dashboard.models';
-import {TranslatePipe} from '@ngx-translate/core';
+import { Component, computed, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { UserDashboardStore } from '../../../core/stores/user-dashboard.store';
+import { ProfileEditFieldComponent } from '../../../shared/components/profile-edit-field/profile-edit-field';
+import { FormControl, Validators } from '@angular/forms';
+import { PasswordChangeField } from '../../../shared/components/password-change-field/password-change-field';
+import { EmailChangeField } from '../../../shared/components/email-change-field/email-change-field';
+import { forkJoin } from 'rxjs';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { UserProfilePayload } from '../../../core/models/dashboard.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-main-page',
@@ -27,7 +27,7 @@ export class MainPage implements OnInit {
 
   @ViewChild(EmailChangeField) emailField!: EmailChangeField;
 
-  readonly store = inject(DashboardStore);
+  readonly store = inject(UserDashboardStore);
   showToast = signal(false);
   toastMessage = signal(''); // Текст сообщения
   toastType = signal<'success' | 'error'>('success'); // Тип сообщения

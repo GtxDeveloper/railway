@@ -115,10 +115,11 @@ public class WorkerService : IWorkerService
 
     public async Task<List<WorkerDto>> GetWorkersByOwnerAsync(Guid ownerId)
     {
-        var business = await _repository.GetBusinessByOwnerIdAsync(ownerId);
-        if (business == null) return new List<WorkerDto>();
+        // 1. Fetch only the workers (no Business data, no EF Core tracking overhead)
+        var workers = await _repository.GetWorkersByOwnerIdAsync(ownerId);
 
-        return business.Workers.Select(w => new WorkerDto
+        // 2. Map to DTO
+        return workers.Select(w => new WorkerDto
         {
             Id = w.Id,
             Name = w.Name,

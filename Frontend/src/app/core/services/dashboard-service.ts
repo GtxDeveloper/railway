@@ -1,7 +1,7 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {MessageResponse} from '../models/message.model';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { MessageResponse } from '../models/message.model';
 import {
   Balance, BusinessProfile, CreateWorkerPayload,
   LinkResponse,
@@ -11,8 +11,8 @@ import {
   WorkersResponse,
   Worker, PublicWorker
 } from "../models/dashboard.models";
-import {UserContext} from '../stores/dashboard-store';
-import {environment} from '../../../environments/environment';
+import { UserContext } from '../stores/user-dashboard.store';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -41,19 +41,19 @@ export class DashboardService {
   }
 
   pay(workerId: string, amount: number, currency: string = "EUR"): Observable<LinkResponse> {
-    return this.http.post<LinkResponse>(`${this.apiUrl}Payments/checkout`, {workerId, amount, currency})
+    return this.http.post<LinkResponse>(`${this.apiUrl}Payments/checkout`, { workerId, amount, currency })
   }
 
   changePassword(oldPassword: string, newPassword: string): Observable<MessageResponse> {
-    return  this.http.post<MessageResponse>(`${this.apiUrl}Account/change-password`, {oldPassword, newPassword})
+    return this.http.post<MessageResponse>(`${this.apiUrl}Account/change-password`, { oldPassword, newPassword })
   }
 
   onInitEmail(event: { newEmail: string, onSuccess: () => void }) {
-    return  this.http.post(`${this.apiUrl}Account/change-email/init`, { newEmail: event.newEmail })
+    return this.http.post(`${this.apiUrl}Account/change-email/init`, { newEmail: event.newEmail })
   }
 
   onConfirmEmail(event: { newEmail: string, code: string }) {
-    return  this.http.post(`${this.apiUrl}Account/change-email/confirm`, {
+    return this.http.post(`${this.apiUrl}Account/change-email/confirm`, {
       newEmail: event.newEmail,
       code: event.code
     })
@@ -65,8 +65,8 @@ export class DashboardService {
     return this.http.put(`${this.apiUrl}Account/profile`, payload);
   }
 
-  changeJob(id: string ,newJob: string) {
-    return this.http.post(`${this.apiUrl}Workers/${id}/job`, {newJob})
+  changeJob(id: string, newJob: string) {
+    return this.http.post(`${this.apiUrl}Workers/${id}/job`, { newJob })
   }
 
   getLoginLink(id: string): Observable<LinkResponse> {
@@ -98,14 +98,14 @@ export class DashboardService {
     return this.http.get<BusinessProfile>(`${this.apiUrl}Dashboard/business`);
   }
 
-// 2. Загрузить логотип бизнеса
+  // 2. Загрузить логотип бизнеса
   uploadBusinessLogo(file: File): Observable<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<UploadResponse>(`${this.apiUrl}Dashboard/business/avatar`, formData);
   }
 
-// 3. Загрузить аватар работника
+  // 3. Загрузить аватар работника
   uploadWorkerAvatar(workerId: string, file: File): Observable<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
@@ -136,7 +136,7 @@ export class DashboardService {
     return this.http.post<{ inviteUrl: string }>(`${this.apiUrl}Dashboard/worker/${workerId}/invite`, {});
   }
 
-  getPayLink(workerId: string) : Observable<LinkResponse> {
+  getPayLink(workerId: string): Observable<LinkResponse> {
     return this.http.get<LinkResponse>(`${this.apiUrl}Workers/${workerId}/pay-link`);
   }
   getWorkerSummary(workerId: string) {

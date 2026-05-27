@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Tringelty.Core.Interfaces;
 
@@ -9,6 +9,7 @@ namespace Tringelty.Api.Controllers;
 public class WebhooksController : ControllerBase
 {
     private readonly string _whSecret; 
+    private readonly string _connectWhSecret; // Добавляем второй ключ для Connect
 
     private readonly IWebhookService _webhookService;
     private readonly ILogger<WebhooksController> _logger;
@@ -19,6 +20,9 @@ public class WebhooksController : ControllerBase
         _logger = logger;
         _whSecret = configuration["StripeSettings:WhSecret"] 
                     ?? throw new InvalidOperationException("Stripe Webhook Secret is missing in configuration.");
+                    
+        _connectWhSecret = configuration["StripeSettings:ConnectWhSecret"] 
+                    ?? throw new InvalidOperationException("Stripe Connect Webhook Secret is missing in configuration.");
     }
 
     [HttpPost]
@@ -28,7 +32,7 @@ public class WebhooksController : ControllerBase
         
         try 
         {
-            // 1. ВАЖНО: Разрешаем буферизацию и перематываем поток в начало
+            // 1. Разрешаем буферизацию и перематываем поток в начало
             HttpContext.Request.EnableBuffering();
             HttpContext.Request.Body.Position = 0;
 
@@ -38,7 +42,6 @@ public class WebhooksController : ControllerBase
                 json = await reader.ReadToEndAsync();
             }
 
-            // Лог для отладки (увидишь в Railway logs)
             _logger.LogInformation($"Webhook received. Length: {json.Length}");
 
             if (string.IsNullOrEmpty(json))
@@ -47,12 +50,20 @@ public class WebhooksController : ControllerBase
                 return BadRequest("Empty body");
             }
 
-            // 3. Проверяем подпись
-            var stripeEvent = EventUtility.ConstructEvent(
-                json,
-                Request.Headers["Stripe-Signature"],
-                _whSecret
-            );
+            var signatureHeader = Request.Headers["Stripe-Signature"];
+            Event stripeEvent;
+
+            // 3. Проверяем подпись двумя ключами
+            try
+            {
+                // Сначала пробуем ключ обычного вебхука (Платежи)
+                stripeEvent = EventUtility.ConstructEvent(json, signatureHeader, _whSecret);
+            }
+            catch (StripeException)
+            {
+                // Если не подошел, значит это запрос от воркера. Пробуем Connect-ключ
+                stripeEvent = EventUtility.ConstructEvent(json, signatureHeader, _connectWhSecret);
+            }
 
             // 4. Делегируем логику
             await _webhookService.HandleEventAsync(stripeEvent);
@@ -61,8 +72,8 @@ public class WebhooksController : ControllerBase
         }
         catch (StripeException e)
         {
-            // Это ошибка подписи или формата Stripe
-            _logger.LogError(e, "Stripe Webhook Error");
+            // Если мы попали сюда, значит оба ключа не подошли (ошибка подписи)
+            _logger.LogError(e, "Stripe Webhook Error: Signature validation failed for both secrets.");
             return BadRequest();
         }
         catch (Exception e)

@@ -57,7 +57,9 @@
       "PHONE": "Telefón",
       "CITY": "Mesto",
       "PASSWORD": "Heslo",
-      "REPEAT_PASSWORD": "Zopakujte heslo"
+      "REPEAT_PASSWORD": "Zopakujte heslo",
+      "ACCEPT_TERMS": "Súhlasím so",
+      "PRIVACY_POLICY": "Zásadami ochrany osobných údajov a Podmienkami poskytovania služieb"
     },
     "BUTTON": "Registrovať sa",
     "BUTTON_BACK": "Späť",

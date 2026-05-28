@@ -57,7 +57,9 @@
       "PHONE": "Phone",
       "CITY": "City",
       "PASSWORD": "Password",
-      "REPEAT_PASSWORD": "Repeat password"
+      "REPEAT_PASSWORD": "Repeat password",
+      "ACCEPT_TERMS": "I agree to the",
+      "PRIVACY_POLICY": "Privacy Policy and Terms of Service"
     },
     "BUTTON": "Sign Up",
     "BUTTON_BACK": "Go back",

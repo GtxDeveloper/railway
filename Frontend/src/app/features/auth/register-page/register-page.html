@@ -162,6 +162,23 @@
         </div>
       }
 
+      <div class="flex items-start gap-3 px-1 mt-2 mb-4">
+        <div class="flex items-center h-6">
+          <input
+            id="acceptTerms"
+            type="checkbox"
+            formControlName="acceptTerms"
+            class="w-5 h-5 rounded border-2 border-white/50 bg-transparent text-[#ffc800] focus:ring-[#ffc800] focus:ring-2 focus:ring-offset-0 cursor-pointer transition-colors"
+          >
+        </div>
+        <label for="acceptTerms" class="text-sm sm:text-base text-white/90 raleway font-medium leading-tight cursor-pointer select-none">
+          {{ 'REGISTER.FORM.ACCEPT_TERMS' | translate }}
+          <a routerLink="/privacy-policy" target="_blank" class="text-[#ffc800] hover:underline transition ease-in ml-1">
+            {{ 'REGISTER.FORM.PRIVACY_POLICY' | translate }}
+          </a>
+        </label>
+      </div>
+
       <button
         type="submit"
         [disabled]="form.invalid || isLoading()"

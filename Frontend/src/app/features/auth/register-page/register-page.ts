@@ -43,7 +43,9 @@ export class RegisterPage implements OnInit {
     ]],
     repeatPassword: ['', [Validators.required, Validators.minLength(8)]],
     phone: [''],
-    city: ['']
+    city: [''],
+
+    acceptTerms: [false, Validators.requiredTrue]
   }, {validators: passwordMatchValidator});
 
   ngOnInit() {

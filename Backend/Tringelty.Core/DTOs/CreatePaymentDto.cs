@@ -12,4 +12,6 @@ public class CreatePaymentDto
     public decimal Amount { get; set; } // Сумма (например, 5.00)
 
     public string Currency { get; set; } = "eur"; // Валюта (eur для Словакии)
+
+    public bool CoverFee { get; set; }
 }

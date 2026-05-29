@@ -36,12 +36,12 @@ export class PaymentStore {
   }
 
   // 2. Оплата (редирект на Stripe)
-  pay(workerId: string, amount: number, note: string) {
+  pay(workerId: string, amount: number, note: string, coverFee: boolean) {
     this.isPaying.set(true);
 
     // Предположим, в сервисе есть метод createCheckoutSession
     // который возвращает { url: string }
-    this.api.pay(workerId, amount)
+    this.api.pay(workerId, amount, coverFee)
       .pipe(finalize(() => this.isPaying.set(false)))
       .subscribe({
         next: (res) => {

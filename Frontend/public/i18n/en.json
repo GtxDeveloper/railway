@@ -90,7 +90,8 @@
     "NOTE_PLACEHOLDER": "Leave a message? (optional)",
     "PROCESSING": "Processing...",
     "PAY_BUTTON": "Pay",
-    "POWERED_BY": "Powered by Tringelty"
+    "POWERED_BY": "Powered by Tringelty",
+    "COVER_FEE": "Cover platform fee"
   },
   "PAYMENT_CANCEL": {
     "TITLE": "Payment Cancelled",

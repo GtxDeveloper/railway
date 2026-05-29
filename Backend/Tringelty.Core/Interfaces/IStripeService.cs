@@ -10,7 +10,7 @@ public interface IStripeService
     // Генерирует временную ссылку для ввода банковских данных
     Task<string> CreateOnboardingLinkAsync(string accountId);
     
-    Task<string> CreateCheckoutSessionAsync(string connectedAccountId, decimal amount, string currency, Worker worker);
+    Task<string> CreateCheckoutSessionAsync(string connectedAccountId, decimal amount, string currency, Worker worker, bool coverFee);
     Task<string> CreateLoginLinkAsync(string workerStripeAccountId);
 
     Task<BalanceDto> GetWorkerBalanceAsync(string workerStripeAccountId);

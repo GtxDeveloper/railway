@@ -36,7 +36,8 @@ public class PaymentService : IPaymentService
             worker.StripeAccountId,
             request.Amount,
             request.Currency,
-            worker
+            worker,
+            request.CoverFee
         );
 
         return paymentUrl;

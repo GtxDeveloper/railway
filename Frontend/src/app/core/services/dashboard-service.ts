@@ -40,8 +40,8 @@ export class DashboardService {
     });
   }
 
-  pay(workerId: string, amount: number, currency: string = "EUR"): Observable<LinkResponse> {
-    return this.http.post<LinkResponse>(`${this.apiUrl}Payments/checkout`, { workerId, amount, currency })
+  pay(workerId: string, amount: number, coverFee: boolean, currency: string = "EUR"): Observable<LinkResponse> {
+    return this.http.post<LinkResponse>(`${this.apiUrl}Payments/checkout`, { workerId, amount, currency, coverFee })
   }
 
   changePassword(oldPassword: string, newPassword: string): Observable<MessageResponse> {

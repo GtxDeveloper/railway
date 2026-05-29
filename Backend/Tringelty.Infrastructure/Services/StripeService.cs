@@ -66,60 +66,72 @@ public class StripeService : IStripeService
         return link.Url;
     }
     
-    public async Task<string> CreateCheckoutSessionAsync(string connectedAccountId, decimal amount, string currency, Worker worker)
-    {
-        var feePercent = _configuration.GetValue<decimal>("StripeSettings:PlatformFeePercent", 10m);
+    public async Task<string> CreateCheckoutSessionAsync(string connectedAccountId, decimal amount, string currency, Worker worker, bool coverFee)
+{
+    var feePercent = _configuration.GetValue<decimal>("StripeSettings:PlatformFeePercent", 10m);
+    var feeMultiplier = feePercent / 100m;
     
-        var feeMultiplier = feePercent / 100m;
-        
-        var amountInCents = (long)(amount * 100);
-        
-        var applicationFee = (long)(amountInCents * feeMultiplier);
-        var frontendUrl = _configuration["AppSettings:FrontendUrl"];
-        var options = new SessionCreateOptions
-        {
-            Mode = "payment",
-            PaymentMethodTypes = new List<string> { "card" },
-            LineItems = new List<SessionLineItemOptions>
-            {
-                new SessionLineItemOptions
-                {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        UnitAmount = amountInCents,
-                        Currency = currency,
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = $"Tips for {worker.Name}",
-                        },
-                    },
-                    Quantity = 1,
-                },
-            },
-            PaymentIntentData = new SessionPaymentIntentDataOptions
-            {
-                ApplicationFeeAmount = applicationFee,
-                TransferData = new SessionPaymentIntentDataTransferDataOptions
-                {
-                    Destination = worker.StripeAccountId,
-                },
-                // !!! ВОТ ЭТО НУЖНО ДОБАВИТЬ !!!
-                Metadata = new Dictionary<string, string>
-                {
-                    { "WorkerId", worker.Id.ToString() }, // Наш GUID
-                    { "PlatformFee", applicationFee.ToString() }, // Наша комиссия в копейках
-                    { "FeePercent", feePercent.ToString() }
-                }
-            },
-            SuccessUrl = $"{frontendUrl}/payment/success",
-            CancelUrl = $"{frontendUrl}/payment/cancel",
-        };
-
-        var service = new SessionService();
-        var session = await service.CreateAsync(options);
-
-        return session.Url;
+    // 1. Высчитываем саму комиссию в валюте (например, от 10 EUR комиссия составит 1 EUR)
+    decimal feeAmount = amount * feeMultiplier;
+    
+    // 2. Определяем итоговую сумму списания с карты гостя
+    decimal totalChargeAmount = amount;
+    if (coverFee)
+    {
+        totalChargeAmount = amount + feeAmount; // Спишем 11 EUR вместо 10 EUR
     }
+
+    // 3. Переводим всё в центы для Stripe
+    var amountInCents = (long)(totalChargeAmount * 100);
+    var applicationFeeInCents = (long)(feeAmount * 100);
+    
+    var frontendUrl = _configuration["AppSettings:FrontendUrl"];
+    
+    var options = new SessionCreateOptions
+    {
+        Mode = "payment",
+        PaymentMethodTypes = new List<string> { "card" },
+        LineItems = new List<SessionLineItemOptions>
+        {
+            new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = amountInCents, // Передаем ИТОГОВУЮ сумму к списанию
+                    Currency = currency,
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = $"Tips for {worker.Name}",
+                    },
+                },
+                Quantity = 1,
+            },
+        },
+        PaymentIntentData = new SessionPaymentIntentDataOptions
+        {
+            ApplicationFeeAmount = applicationFeeInCents, // Платформа забирает свою комсу
+            TransferData = new SessionPaymentIntentDataTransferDataOptions
+            {
+                Destination = worker.StripeAccountId, // Воркер получает остаток
+            },
+            Metadata = new Dictionary<string, string>
+            {
+                { "WorkerId", worker.Id.ToString() }, 
+                { "OriginalTipAmount", amount.ToString("0.00") }, // Исходная сумма чаевых
+                { "PlatformFee", applicationFeeInCents.ToString() },
+                { "FeePercent", feePercent.ToString() },
+                { "FeeCoveredByGuest", coverFee.ToString() } // Записываем, кто оплатил банкет
+            }
+        },
+        SuccessUrl = $"{frontendUrl}/payment/success",
+        CancelUrl = $"{frontendUrl}/payment/cancel",
+    };
+
+    var service = new SessionService();
+    var session = await service.CreateAsync(options);
+
+    return session.Url;
+}
 
     
     public async Task<string> CreateLoginLinkAsync(string workerStripeAccountId)

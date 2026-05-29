@@ -90,7 +90,8 @@
     "NOTE_PLACEHOLDER": "Chcete niečo odkázať? (nepovinné)",
     "PROCESSING": "Spracovávam...",
     "PAY_BUTTON": "Zaplatiť",
-    "POWERED_BY": "Powered by Tringelty"
+    "POWERED_BY": "Powered by Tringelty",
+    "COVER_FEE": "Zaplatiť poplatok platformy"
   },
   "PAYMENT_CANCEL": {
     "TITLE": "Platba zrušená",

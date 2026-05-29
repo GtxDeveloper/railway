@@ -40,6 +40,10 @@ export class PaymentPage implements OnInit {
   amount = signal<number | null>(null);
   note = signal<string>('');
 
+
+  coverFee = signal<boolean>(false);
+  private readonly platformFeePercent = 1.5;
+
   presets = [2, 5, 10, 20]; // Немного увеличил пресеты, стандартная практика
 
   ngOnInit() {
@@ -54,6 +58,21 @@ export class PaymentPage implements OnInit {
     this.amount.set(value);
   }
 
+  getFeeAmount(): number {
+    const currentAmount = this.amount();
+    if (!currentAmount) return 0;
+    return Number(((currentAmount * this.platformFeePercent) / 100).toFixed(2));
+  }
+
+  getTotalAmount(): number {
+    const currentAmount = this.amount();
+    if (!currentAmount) return 0;
+    
+    return this.coverFee() 
+      ? Number((currentAmount + this.getFeeAmount()).toFixed(2)) 
+      : currentAmount;
+  }
+
   pay() {
     const worker = this.store.worker();
     const amountVal = this.amount();
@@ -64,6 +83,6 @@ export class PaymentPage implements OnInit {
     }
 
     // Вызываем метод оплаты из стора
-    this.store.pay(worker.id, amountVal, noteVal);
+    this.store.pay(worker.id, amountVal, noteVal, this.coverFee());
   }
 }

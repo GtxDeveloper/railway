@@ -80,6 +80,22 @@
         ></textarea>
       </div>
 
+      <div class="flex items-center gap-3 px-2 mt-6 mb-2">
+        <input
+          type="checkbox"
+          id="coverFee"
+          [ngModel]="coverFee()"
+          (ngModelChange)="coverFee.set($event)"
+          class="w-6 h-6 rounded border-2 border-white/50 bg-transparent text-[#ffc800] focus:ring-[#ffc800] focus:ring-2 focus:ring-offset-0 cursor-pointer transition-colors"
+        >
+        <label for="coverFee" class="text-white font-bold raleway cursor-pointer select-none text-sm sm:text-base">
+          {{ 'PAYMENT.COVER_FEE' | translate }}
+          @if (amount() && coverFee()) {
+            <span class="text-[#ffc800] ml-1">(+{{ getFeeAmount() }}€)</span>
+          }
+        </label>
+      </div>
+
       <button
         (click)="pay()"
         [disabled]="store.isPaying() || !amount()"

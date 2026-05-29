@@ -151,4 +151,8 @@ export class DashboardService {
   deleteWorker(workerId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}Dashboard/worker/${workerId}`);
   }
+
+  getPlatformFee(): Observable<{ feePercent: number }> {
+    return this.http.get<{ feePercent: number }>(`${this.apiUrl}Settings/platform-fee`);
+  }
 }

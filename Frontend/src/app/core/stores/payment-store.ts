@@ -16,7 +16,7 @@ export class PaymentStore {
   readonly error = signal<string | null>(null);
 
   readonly worker = signal<PublicWorker | null>(null);
-
+  feePercent = signal<number>(0);
   // --- ACTIONS ---
 
   // 1. Загрузка профиля
@@ -53,5 +53,18 @@ export class PaymentStore {
           alert('Chyba pri vytváraní platby');
         }
       });
+  }
+
+  loadPlatformFee() {
+    this.api.getPlatformFee().subscribe({
+      next: (res) => {
+        this.feePercent.set(res.feePercent);
+      },
+      error: (err) => {
+        console.error('Не удалось загрузить процент комиссии', err);
+        // Фолбэк на случай падения сети (чтобы оплата не сломалась)
+        this.feePercent.set(10); 
+      }
+    });
   }
 }

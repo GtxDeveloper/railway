@@ -42,11 +42,14 @@ export class PaymentPage implements OnInit {
 
 
   coverFee = signal<boolean>(false);
-  private readonly platformFeePercent = 1.5;
+  
 
   presets = [2, 5, 10, 20]; // Немного увеличил пресеты, стандартная практика
 
   ngOnInit() {
+
+    this.store.loadPlatformFee();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       // Загружаем данные работника сразу при входе
@@ -60,8 +63,10 @@ export class PaymentPage implements OnInit {
 
   getFeeAmount(): number {
     const currentAmount = this.amount();
-    if (!currentAmount) return 0;
-    return Number(((currentAmount * this.platformFeePercent) / 100).toFixed(2));
+    const platformFee = this.store.feePercent(); // <--- Читаем из стора
+    
+    if (!currentAmount || !platformFee) return 0;
+    return Number(((currentAmount * platformFee) / 100).toFixed(2));
   }
 
   getTotalAmount(): number {

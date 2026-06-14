@@ -99,3 +99,16 @@ export interface PublicWorker {
   job: string;
   avatarUrl: string | null;
 }
+
+// Один уровень тарифа комиссии: процент + фиксированная часть в центах
+export interface FeeTier {
+  percent: number;
+  fixedCents: number;
+}
+
+// Двухуровневый тариф: до порога (вкл.) и выше порога
+export interface PlatformFeeConfig {
+  thresholdAmount: number;
+  lowTier: FeeTier;
+  highTier: FeeTier;
+}

@@ -68,12 +68,31 @@ public class StripeService : IStripeService
     
     public async Task<string> CreateCheckoutSessionAsync(string connectedAccountId, decimal amount, string currency, Worker worker, bool coverFee)
 {
-    var feePercent = _configuration.GetValue<decimal>("StripeSettings:PlatformFeePercent", 10m);
-    var feeMultiplier = feePercent / 100m;
-    
-    // 1. Высчитываем саму комиссию в валюте (например, от 10 EUR комиссия составит 1 EUR)
-    decimal feeAmount = amount * feeMultiplier;
-    
+    // 0. Определяем тариф комиссии по порогу суммы.
+    //    До порога (вкл.): меньший процент + маленькая фикса; выше порога: меньший процент + большая фикса.
+    var feeThreshold = _configuration.GetValue<decimal>("StripeSettings:FeeThresholdAmount", 5m);
+
+    decimal feePercent;
+    decimal feeFixedCents;
+    if (amount <= feeThreshold)
+    {
+        feePercent = _configuration.GetValue<decimal>("StripeSettings:LowTierFeePercent", 5m);
+        feeFixedCents = _configuration.GetValue<decimal>("StripeSettings:LowTierFeeFixedCents", 5m);
+    }
+    else
+    {
+        feePercent = _configuration.GetValue<decimal>("StripeSettings:HighTierFeePercent", 1.5m);
+        feeFixedCents = _configuration.GetValue<decimal>("StripeSettings:HighTierFeeFixedCents", 25m);
+    }
+
+    // 1. Комиссия = процент от суммы + фиксированная часть (центы переводим в евро).
+    //    Пример: 4 EUR -> 4 * 5% + 0.05 = 0.25 EUR;  10 EUR -> 10 * 1.5% + 0.25 = 0.40 EUR
+    //    Округляем до цента (half away from zero), чтобы совпадать с фронтом (toFixed(2)).
+    decimal feeAmount = Math.Round(
+        amount * (feePercent / 100m) + (feeFixedCents / 100m),
+        2,
+        MidpointRounding.AwayFromZero);
+
     // 2. Определяем итоговую сумму списания с карты гостя
     decimal totalChargeAmount = amount;
     if (coverFee)
@@ -81,9 +100,9 @@ public class StripeService : IStripeService
         totalChargeAmount = amount + feeAmount; // Спишем 11 EUR вместо 10 EUR
     }
 
-    // 3. Переводим всё в центы для Stripe
-    var amountInCents = (long)(totalChargeAmount * 100);
-    var applicationFeeInCents = (long)(feeAmount * 100);
+    // 3. Переводим всё в центы для Stripe (суммы уже округлены до цента)
+    var amountInCents = (long)Math.Round(totalChargeAmount * 100, MidpointRounding.AwayFromZero);
+    var applicationFeeInCents = (long)Math.Round(feeAmount * 100, MidpointRounding.AwayFromZero);
     
     var frontendUrl = _configuration["AppSettings:FrontendUrl"];
     
@@ -120,6 +139,7 @@ public class StripeService : IStripeService
                 { "OriginalTipAmount", amount.ToString("0.00") }, // Исходная сумма чаевых
                 { "PlatformFee", applicationFeeInCents.ToString() },
                 { "FeePercent", feePercent.ToString() },
+                { "FeeFixedCents", feeFixedCents.ToString() },
                 { "FeeCoveredByGuest", coverFee.ToString() } // Записываем, кто оплатил банкет
             }
         },

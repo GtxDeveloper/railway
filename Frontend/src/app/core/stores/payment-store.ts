@@ -2,7 +2,14 @@ import { inject, Injectable, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 import {DashboardService} from '../services/dashboard-service';
-import {PublicWorker} from '../models/dashboard.models';
+import {PlatformFeeConfig, PublicWorker} from '../models/dashboard.models';
+
+// Фолбэк-тариф на случай падения сети (чтобы оплата не сломалась)
+const FALLBACK_FEE_CONFIG: PlatformFeeConfig = {
+  thresholdAmount: 5,
+  lowTier: { percent: 5, fixedCents: 5 },
+  highTier: { percent: 1.5, fixedCents: 25 }
+};
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +23,7 @@ export class PaymentStore {
   readonly error = signal<string | null>(null);
 
   readonly worker = signal<PublicWorker | null>(null);
-  feePercent = signal<number>(0);
+  feeConfig = signal<PlatformFeeConfig | null>(null);
   // --- ACTIONS ---
 
   // 1. Загрузка профиля
@@ -58,12 +65,11 @@ export class PaymentStore {
   loadPlatformFee() {
     this.api.getPlatformFee().subscribe({
       next: (res) => {
-        this.feePercent.set(res.feePercent);
+        this.feeConfig.set(res);
       },
       error: (err) => {
-        console.error('Не удалось загрузить процент комиссии', err);
-        // Фолбэк на случай падения сети (чтобы оплата не сломалась)
-        this.feePercent.set(10); 
+        console.error('Не удалось загрузить тариф комиссии', err);
+        this.feeConfig.set(FALLBACK_FEE_CONFIG);
       }
     });
   }

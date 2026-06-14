@@ -63,10 +63,16 @@ export class PaymentPage implements OnInit {
 
   getFeeAmount(): number {
     const currentAmount = this.amount();
-    const platformFee = this.store.feePercent(); // <--- Читаем из стора
-    
-    if (!currentAmount || !platformFee) return 0;
-    return Number(((currentAmount * platformFee) / 100).toFixed(2));
+    const config = this.store.feeConfig(); // <--- Читаем тариф из стора
+
+    if (!currentAmount || !config) return 0;
+
+    // До порога (вкл.) — низкий тариф, выше — высокий. Та же логика, что и на бэкенде.
+    const tier = currentAmount <= config.thresholdAmount ? config.lowTier : config.highTier;
+
+    // Комиссия = процент от суммы + фиксированная часть (центы -> евро)
+    const fee = (currentAmount * tier.percent) / 100 + tier.fixedCents / 100;
+    return Number(fee.toFixed(2));
   }
 
   getTotalAmount(): number {

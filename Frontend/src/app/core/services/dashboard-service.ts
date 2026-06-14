@@ -9,7 +9,7 @@ import {
   Summary,
   Transaction, UpdateWorkerPayload, UploadResponse, UserProfilePayload,
   WorkersResponse,
-  Worker, PublicWorker
+  Worker, PublicWorker, PlatformFeeConfig
 } from "../models/dashboard.models";
 import { UserContext } from '../stores/user-dashboard.store';
 import { environment } from '../../../environments/environment';
@@ -152,7 +152,7 @@ export class DashboardService {
     return this.http.delete<void>(`${this.apiUrl}Dashboard/worker/${workerId}`);
   }
 
-  getPlatformFee(): Observable<{ feePercent: number }> {
-    return this.http.get<{ feePercent: number }>(`${this.apiUrl}Settings/platform-fee`);
+  getPlatformFee(): Observable<PlatformFeeConfig> {
+    return this.http.get<PlatformFeeConfig>(`${this.apiUrl}Settings/platform-fee`);
   }
 }

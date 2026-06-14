@@ -41,7 +41,7 @@ export class PaymentPage implements OnInit {
   note = signal<string>('');
 
 
-  coverFee = signal<boolean>(false);
+  coverFee = signal<boolean>(true);
   
 
   presets = [2, 5, 10, 20]; // Немного увеличил пресеты, стандартная практика

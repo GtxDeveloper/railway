@@ -13,7 +13,7 @@
         <nav class="footer-nav">
           <div class="nav-row">
             <a href="#">{{ 'FOOTER.LINKS.CONTACTS' | translate }}</a>
-            <a href="#">{{ 'FOOTER.LINKS.TERMS' | translate }}</a>
+            <a [href]="termsUrl" target="_blank" rel="noopener">{{ 'FOOTER.LINKS.TERMS' | translate }}</a>
           </div>
           <a href="#">{{ 'FOOTER.LINKS.PRIVACY' | translate }}</a>
           <a href="#">{{ 'FOOTER.LINKS.DATA_TRANSFER' | translate }}</a>
